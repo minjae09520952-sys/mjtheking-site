@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101920">
+  <meta name="description" content="한자 학습지 전체 범위 4지선다형 오프라인 퀴즈 — 자전, 부수, 변형부수, 한시, 한자 암기">
+  <title>한자 마스터 · 학교 시험 대비 퀴즈</title>
+  <style>
+    :root {
+      --bg:#0e171e; --panel:#18242d; --panel-soft:#1b2a33; --edge:#354550;
+      --text:#f3f6f3; --sub:#a8b6b7; --muted:#7f9197; --accent:#b0edcd;
+      --accent-ink:#10241c; --accent-faint:rgba(176,237,205,.11);
+      --right:#a5ebc7; --right-bg:rgba(72,165,112,.16);
+      --wrong:#ffc0c0; --wrong-bg:rgba(200,70,70,.18);
+      --glow:rgba(102,183,137,.13); --shadow:0 20px 70px rgba(0,0,0,.2);
+      color-scheme:dark;
+    }
+    body[data-theme="light"]{
+      --bg:#f4f5f0; --panel:#ffffff; --panel-soft:#f7f9f5; --edge:#d5ddd7;
+      --text:#1f302c; --sub:#52655f; --muted:#788983; --accent:#24664f;
+      --accent-ink:#ffffff; --accent-faint:#e0f1e7;
+      --right:#16683c; --right-bg:#e2f4e8;
+      --wrong:#a32727; --wrong-bg:#ffeded;
+      --glow:rgba(74,157,105,.08); --shadow:0 20px 60px rgba(40,60,50,.08);
+      color-scheme:light;
+    }
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{
+      margin:0;color:var(--text);font-family:ui-sans-serif,system-ui,-apple-system,"Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+      background:radial-gradient(circle at 50% -20%,var(--glow),transparent 45%),var(--bg);
+      line-height:1.55;min-height:100vh;
+    }
+    button,select{font:inherit}button{cursor:pointer}button:disabled{cursor:default;opacity:.45}
+    .container{width:min(1040px,calc(100% - 36px));margin:0 auto}
+    .top{border-bottom:1px solid var(--edge);height:75px;display:flex;align-items:center}
+    .top-inner{display:flex;align-items:center;gap:12px}
+    .logo{width:43px;height:43px;border-radius:13px;background:var(--accent);color:var(--accent-ink);
+      font-family:"Noto Serif CJK KR","Noto Serif CJK SC","Noto Serif CJK JP","Malgun Gothic","Batang",serif;font-size:29px;line-height:43px;text-align:center;font-weight:800}
+    .brand{min-width:0;flex:1;display:flex;flex-direction:column;line-height:1.32}
+    .brand strong{font-size:16px;letter-spacing:-.03em}.brand small{font-size:11px;color:var(--muted);letter-spacing:.015em}
+    .top-actions{display:flex;gap:9px}.icon-btn{border:1px solid var(--edge);color:var(--sub);background:var(--panel);border-radius:12px;padding:8px 13px;font-size:14px;font-weight:700}
+    main{padding:37px 0 65px}h1,h2,h3,p{margin-top:0}h1{line-height:1.17;letter-spacing:-.055em}
+    .landing{display:grid;grid-template-columns:minmax(0,1fr) 220px;position:relative;align-items:center;
+      border:1px solid var(--edge);background:linear-gradient(130deg,var(--panel) 0%,var(--panel-soft) 100%);border-radius:28px;
+      min-height:275px;overflow:hidden;padding:42px 45px;box-shadow:var(--shadow)}
+    .overline{display:inline-block;font-weight:800;font-size:11px;letter-spacing:.18em;color:var(--accent);margin-bottom:14px}
+    .landing h1{font-size:clamp(35px,5.3vw,56px);margin:0 0 16px}
+    .landing p{color:var(--sub);margin-bottom:19px;font-size:15px;line-height:1.85;max-width:600px}
+    .lead-metrics{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--sub)}
+    .lead-metrics span{border:1px solid var(--edge);padding:5px 10px;border-radius:99px}
+    .giant{justify-self:center;font-family:"Noto Serif CJK KR","Noto Serif CJK SC","Noto Serif CJK JP","Malgun Gothic","Batang",serif;font-size:160px;
+      color:var(--accent);opacity:.68;line-height:1;transform:rotate(-8deg);text-shadow:0 15px 50px var(--glow)}
+    .section-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:32px 0 15px}
+    .section-head h2{font-size:21px;letter-spacing:-.04em;margin:0}.section-head p{color:var(--muted);margin:0;font-size:13px}
+    .category-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .cat-card{border:1px solid var(--edge);background:var(--panel);padding:18px;border-radius:18px;
+      display:grid;grid-template-columns:25px 1fr;gap:14px;align-items:start;cursor:pointer;transition:border-color .15s,background .15s}
+    .cat-card:hover{border-color:var(--accent)}.cat-card:has(input:checked){background:linear-gradient(115deg,var(--accent-faint),var(--panel));border-color:var(--accent)}
+    .cat-card input{width:20px;height:20px;accent-color:#6eb69a;margin:3px 0;cursor:pointer}
+    .cat-card .tiny{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:11px;margin-bottom:4px}
+    .cat-card h3{font-size:17px;margin:0 0 3px;letter-spacing:-.03em}
+    .cat-card p{font-size:12px;color:var(--sub);margin:0 0 4px}
+    .cat-card .count{font-size:11px;color:var(--accent);font-weight:800}
+    .switches{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .text-btn{border:none;background:transparent;color:var(--accent);font-weight:800;font-size:12px;padding:4px 6px}
+    .setup{border:1px solid var(--edge);border-radius:22px;background:var(--panel);margin-top:20px;padding:23px 26px}
+    .setup-top{display:flex;gap:18px;align-items:end;justify-content:space-between;flex-wrap:wrap}
+    .setup-label{display:block;color:var(--sub);font-size:12px;margin-bottom:8px}
+    .setup h3{margin:0;font-size:18px}.setup h3 small{font-size:12px;font-weight:500;color:var(--muted);margin-left:8px}
+    .control-group{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    select{background:var(--panel-soft);color:var(--text);border:1px solid var(--edge);border-radius:12px;padding:12px 38px 12px 13px;min-width:145px}
+    .check-priority{display:flex;align-items:center;gap:8px;color:var(--sub);font-size:12px;cursor:pointer}
+    .check-priority input{accent-color:#5aa97e;width:17px;height:17px}
+    .action-line{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;border-radius:13px;padding:14px 22px;font-weight:800;border:1px solid transparent;transition:transform .14s,filter .14s}
+    .btn:not(:disabled):hover{transform:translateY(-1px);filter:brightness(1.06)}
+    .btn-primary{background:var(--accent);color:var(--accent-ink)}
+    .btn-alt{background:var(--panel-soft);color:var(--text);border-color:var(--edge)}
+    .btn-wrong{background:transparent;color:var(--sub);border-color:var(--edge)}
+    .action-line .btn-primary{flex:1}
+    .study-progress{color:var(--sub);background:var(--panel-soft);padding:12px 16px;border-radius:12px;margin-top:14px;font-size:13px;border:1px solid var(--edge)}
+    .study-sheet{margin-top:16px;border:1px solid var(--edge);border-radius:14px;background:var(--panel-soft);overflow:hidden}
+    .study-sheet>summary{cursor:pointer;padding:13px 16px;font-weight:800;font-size:14px}
+    .study-sheet>summary span{font-weight:400;color:var(--muted);font-size:11px}
+    .study-sheet-inner{border-top:1px solid var(--edge);padding:12px 17px}
+    .study-sheet-inner p{font-size:13px;color:var(--sub);margin:5px 0 10px;line-height:1.85}
+    .study-sheet-inner b{color:var(--text)}
+    .study-memo{margin-top:16px}
+    .study-memo label{display:block;font-weight:800;font-size:13px;margin:0 0 7px}
+    .study-memo label small{color:var(--muted);font-weight:400}
+    .study-memo textarea{width:100%;border:1px solid var(--edge);border-radius:12px;background:var(--panel-soft);color:var(--text);padding:13px;resize:vertical;font:inherit;font-size:13px}
+    .notes{display:flex;gap:11px;margin-top:18px;padding:14px 17px;border:1px dashed var(--edge);border-radius:15px;color:var(--sub);font-size:12px;line-height:1.7}
+    .notes strong{color:var(--text)}
+    .footer{text-align:center;color:var(--muted);font-size:12px;margin-top:40px}
+    [hidden]{display:none!important}
+    /* Quiz */
+    .quiz-shell{width:min(760px,100%);margin:0 auto}
+    .quiz-top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:12px}
+    .quiz-top .eyebrow{color:var(--accent);font-size:12px;font-weight:900;letter-spacing:.09em}
+    .quiz-top .fraction{color:var(--sub);font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
+    .track{height:8px;border-radius:999px;background:var(--edge);overflow:hidden;margin-bottom:26px}
+    .track div{height:100%;width:0;background:var(--accent);border-radius:999px;transition:width .3s ease}
+    .paper{border:1px solid var(--edge);background:var(--panel);border-radius:26px;padding:34px 38px 38px;box-shadow:var(--shadow);overflow:hidden}
+    .question-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:12px;font-weight:700}
+    .category-pill{background:var(--accent-faint);color:var(--accent);padding:5px 11px;border-radius:100px}
+    .display-hanja{text-align:center;margin:8px 0 0;min-height:188px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+    .display-hanja .hanja{
+      white-space:pre-line;overflow-wrap:anywhere;font-family:"Noto Serif CJK KR","Noto Serif KR","Songti SC","Batang",serif;
+      font-weight:600;color:var(--text);line-height:1.2;letter-spacing:.015em;max-width:100%
+    }
+    .hanja.text-label{font-family:ui-sans-serif,system-ui,"Malgun Gothic",sans-serif;font-size:clamp(32px,6vw,62px);font-weight:850;line-height:1.28;word-break:keep-all;letter-spacing:-.035em}
+    .hanja.single{font-size:clamp(88px,17vw,140px)}
+    .hanja.short{font-size:clamp(65px,12vw,100px)}
+    .hanja.medium{font-size:clamp(42px,8vw,66px)}
+    .hanja.long{font-size:clamp(28px,5.8vw,49px)}
+    .hero-tag{font-size:11px;color:var(--muted);min-height:15px}
+    .stem{text-align:center;font-size:clamp(20px,3vw,25px);line-height:1.52;letter-spacing:-.025em;margin:7px auto 27px;max-width:640px;word-break:keep-all}
+    .choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .choice{background:var(--panel-soft);border:1px solid var(--edge);border-radius:15px;
+      padding:16px;min-height:86px;color:var(--text);display:flex;gap:12px;align-items:center;
+      text-align:left;line-height:1.46;transition:background .14s,border-color .14s,transform .14s;
+      font-size:clamp(13px,1.7vw,16px);font-weight:650;word-break:keep-all}
+    .choice.picked{border-color:var(--accent);background:var(--accent-faint)}
+    .choice:not(:disabled):hover{background:var(--accent-faint);border-color:var(--accent);transform:translateY(-1px)}
+    .choice:focus-visible,.btn:focus-visible,.icon-btn:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+    .key{display:grid;place-items:center;border:1px solid var(--edge);min-width:28px;height:28px;
+      border-radius:9px;color:var(--muted);font-size:12px;font-weight:800;flex-shrink:0}
+    .choice .option-text{flex:1;overflow-wrap:anywhere}
+    .choice .option-text.glyph-option{font-family:"Noto Serif CJK KR","Noto Sans CJK KR","Songti SC","Noto Serif KR","Malgun Gothic","Batang",serif;font-size:clamp(27px,6vw,37px);font-weight:650;line-height:1.2;letter-spacing:0;word-break:keep-all}
+    .choice .option-text.glyph-option-small{font-family:"Noto Serif CJK KR","Noto Sans CJK KR","Songti SC","Malgun Gothic","Batang",serif;font-size:clamp(23px,4vw,30px);font-weight:650;letter-spacing:.015em}
+    .choice .mark{font-weight:900;min-width:20px;text-align:right}
+    .choice:disabled{opacity:1}
+    .choice.correct{background:var(--right-bg);border:2px solid var(--right);color:var(--text)}
+    .choice.correct .key{color:var(--right);border-color:var(--right)}
+    .choice.incorrect{background:var(--wrong-bg);border:2px solid var(--wrong);color:var(--text)}
+    .choice.incorrect .key{color:var(--wrong);border-color:var(--wrong)}
+    .choice.dimmed{opacity:.54}
+    .feedback{padding:17px 18px;margin-top:21px;background:var(--panel-soft);border:1px solid var(--edge);border-radius:15px}
+    .feedback-head{font-size:15px;font-weight:850;margin-bottom:6px}
+    .feedback-head.ok{color:var(--right)}.feedback-head.bad{color:var(--wrong)}
+    .feedback p{font-size:13px;color:var(--sub);line-height:1.8;margin:0}
+    .quiz-nav{display:flex;gap:12px;justify-content:flex-end;align-items:center;margin-top:20px;min-height:53px}
+    .quiz-nav .tip{font-size:11px;color:var(--muted);margin-right:auto}
+    .quiz-nav .btn{min-width:175px}
+    /* Results */
+    .result-shell{width:min(810px,100%);margin:auto}
+    .result-hero{padding:40px 35px;text-align:center;border-radius:27px;background:var(--panel);border:1px solid var(--edge)}
+    .result-hero .medal{font-size:38px;line-height:1;margin-bottom:15px}
+    .result-hero h2{font-size:31px;margin-bottom:2px;letter-spacing:-.05em}
+    .result-ratio{color:var(--accent);font-size:clamp(54px,10vw,82px);font-weight:900;letter-spacing:-.05em;margin:14px 0 0;line-height:1.2}
+    .result-sub{color:var(--sub);font-size:14px}
+    .result-digest{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:20px}
+    .result-digest span{border:1px solid var(--edge);background:var(--panel-soft);border-radius:99px;padding:7px 13px;font-size:12px;color:var(--sub)}
+    .result-actions{margin-top:18px;display:flex;gap:11px;justify-content:center;flex-wrap:wrap}
+    .result-actions button{flex:1;min-width:155px}
+    .result-panel{border:1px solid var(--edge);background:var(--panel);padding:24px;border-radius:20px;margin-top:18px}
+    .result-panel h3{font-size:18px;margin-bottom:16px}
+    .category-result{display:grid;grid-template-columns:minmax(100px,1fr) 3fr 62px;gap:15px;align-items:center;margin:13px 0;font-size:13px}
+    .category-result .name{overflow-wrap:anywhere;color:var(--sub)}
+    .rbar{height:10px;border-radius:99px;background:var(--edge);overflow:hidden}.rbar>div{height:100%;background:var(--accent);border-radius:99px}
+    .category-result .pct{text-align:right;color:var(--sub);font-variant-numeric:tabular-nums}
+    .wrong-list details{background:var(--panel-soft);border:1px solid var(--edge);border-radius:13px;margin:8px 0;padding:12px 16px}
+    .wrong-list summary{cursor:pointer;list-style-position:inside;font-size:13px;font-weight:750;line-height:1.7}
+    .wrong-list p{font-size:12px;color:var(--sub);margin:9px 0 0;line-height:1.7}
+    .wrong-list b{color:var(--accent)}
+    @media(max-width:720px){
+      .container{width:min(100% - 25px,1040px)}.landing{grid-template-columns:minmax(0,1fr) 100px;padding:27px 24px;min-height:235px;border-radius:21px}
+      .giant{font-size:100px}.landing p{font-size:13px}.paper{padding:22px 18px 26px}.choice{min-height:74px;padding:12px}
+      .setup{padding:20px}.quiz-nav .tip{display:none}
+    }
+    @media(max-width:490px){
+      .top{height:64px}.brand strong{font-size:14px}.brand small{font-size:10px}
+      main{padding-top:20px}.landing{display:block;padding:25px 21px;min-height:0}.landing h1{font-size:36px}
+      .giant{display:none}.category-grid{grid-template-columns:1fr}.section-head{margin-top:25px;align-items:center}
+      .section-head h2{font-size:18px}.section-head p{font-size:11px}
+      .setup h3 small{display:block;margin:5px 0 0}.setup-top{align-items:start}
+      .control-group{width:100%}.control-group select{width:100%}
+      .action-line .btn{width:100%;flex:none}.notes{font-size:12px}
+      .display-hanja{min-height:147px}.hanja.single{font-size:clamp(88px,24vw,128px)}
+      .hanja.short{font-size:clamp(60px,15vw,95px)}.hanja.medium{font-size:clamp(35px,10vw,58px)}.hanja.long{font-size:clamp(28px,7vw,42px)}
+      .stem{font-size:20px;margin-bottom:21px}
+      .choices{grid-template-columns:1fr;gap:10px}.choice{min-height:58px;padding:11px 13px;font-size:15px}
+      .quiz-nav .btn{width:100%}.result-hero{padding:29px 19px}.result-actions button{flex-basis:100%}
+      .category-result{grid-template-columns:minmax(86px,1.1fr) 2fr 48px;gap:8px;font-size:11px}
+      .result-panel{padding:18px 14px}
+    }
+    @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+  </style>
+</head>
+<body data-theme="dark">
+<header class="top">
+  <div class="container top-inner">
+    <div class="logo" aria-hidden="true">漢</div>
+    <div class="brand"><strong>한자 마스터</strong><small>학습지 기반 · 오프라인 실전 퀴즈</small></div>
+    <div class="top-actions">
+      <button class="icon-btn" id="homeNav" type="button" hidden>처음으로</button>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="화면 테마 전환">☼</button>
+    </div>
+  </div>
+</header>
+<main class="container">
+  <section id="homeView">
+    <div class="landing">
+      <div>
+        <div class="overline">HANJA STUDY · FOCUSED EXAM EDITION</div>
+        <h1>시험 범위는 빠짐없이,<br>문제는 정확하게</h1>
+        <p>보내준 12장 학습지를 다시 대조했어. <b>부수 50개와 한자 53개는 모두 수록</b>하고, 단순 순서 암기와 중복된 문제는 줄였어. 실제 시험 문제와 똑같다는 보장은 없지만, 학습지의 핵심을 먼저 익힐 수 있어.</p>
+        <div class="lead-metrics"><span>7개 학습 영역</span><span id="totalBadge">280문제 수록</span><span>오프라인 사용 가능</span></div>
+      </div>
+      <div class="giant" aria-hidden="true">學</div>
+    </div>
+    <div class="section-head">
+      <div><h2>01. 학습 범위 선택</h2><p>원하는 단원만 골라 풀 수 있어</p></div>
+      <div class="switches">
+        <button type="button" class="text-btn" id="selectAll">전체 선택</button>
+        <button type="button" class="text-btn" id="clearAll">모두 해제</button>
+      </div>
+    </div>
+    <div id="categoryGrid" class="category-grid"></div>
+    <div class="setup">
+      <div class="setup-top">
+        <div><span class="setup-label">02. 문제 수 설정</span><h3 id="selectedInfo">7개 단원 선택 <small>총 280문제</small></h3></div>
+        <div class="control-group"><select id="countSelect" aria-label="문제 수 선택">
+          <option value="10">10문제 · 짧은 복습</option>
+          <option value="20" selected>20문제 · 추천</option>
+          <option value="30">30문제 · 실전 연습</option>
+          <option value="50">50문제 · 집중 학습</option>
+          <option value="100">100문제 · 종합 학습</option>
+          <option value="all">선택한 범위 전체</option>
+        </select></div>
+      </div>
+      <div style="margin-top:16px"><label class="check-priority"><input type="checkbox" id="priorityToggle" checked> 학습지 핵심·오답·미학습 문제 우선 (짧게 풀 때)</label></div>
+      <div class="action-line">
+        <button class="btn btn-primary" id="startBtn" type="button">선택한 범위로 시작 <span aria-hidden="true">→</span></button>
+        <button class="btn btn-alt" id="allBtn" type="button">전체 범위 풀기</button>
+        <button class="btn btn-alt" id="weakBtn" type="button">약점 집중 20문제</button>
+        <button class="btn btn-alt" id="examBtn" type="button">실전 모드 20문제</button>
+        <button class="btn btn-wrong" id="savedWrongBtn" type="button">저장된 오답 <span id="savedWrongCount">0</span></button>
+      </div>
+      <div class="study-progress" id="progressSummary" role="status">학습 기록을 불러오는 중</div>
+      <details class="study-sheet"><summary>시험 직전 1분 핵심 노트 <span>펼쳐 보기</span></summary>
+        <div class="study-sheet-inner">
+          <p><b>자전 찾기</b> · 부수색인: 부수 확인 → 부수 획수 → 나머지 획수 / 총획색인: 모든 획수 / 자음색인: 알고 있는 음의 첫 자음</p>
+          <p><b>변형부수</b> · 水→氵, 心→忄, 手→扌, 火→灬, 人→亻 / 왼쪽 阝은 阜(좌부변), 오른쪽 阝은 邑(우부방) / 고기 육(肉)은 月 모양이 될 수 있어</p>
+          <p><b>심은자불우</b> · 은자=세속을 떠나 숨어 사는 사람 / 가도 / 오언절구 / 기승전결 / 찾았지만 만나지 못한 아쉬움</p>
+          <p><b>한시 대구</b> · 대우법은 두 시구의 내용·어법을 짝지음 / 개 발자국→매화꽃, 닭 발자국→대나무 잎 / 손자↔할아버지, 밤마다↔아침마다</p>
+          <p><b>봄날 풍경</b> · 김병연(김삿갓) / 칠언절구 / 압운 花·何 / 경치는 그릴 수 있어도 숲속 새소리는 그림에 담기 어려움</p>
+        </div>
+      </details>
+      <div class="study-memo"><label for="myMemo">나만의 암기 메모 <small>자동 저장 · 이 브라우저에서만 보관</small></label><textarea id="myMemo" rows="3" placeholder="헷갈리는 부수, 한자, 한시 구절을 짧게 정리해 봐."></textarea></div>
+      <div class="notes"><span aria-hidden="true">✦</span><span><strong>학습 방식</strong> · 학습지에 나온 것만 출제 · 부수는 모양 ↔ 뜻 · 한자표는 뜻·음 · 자전은 3가지 방법만 · 한시는 감상 중심. 1~4번 키로 선택 가능. 복습 기록은 기기에만 저장돼.</span></div>
+    </div>
+    <p class="footer">파일을 열기만 하면 인터넷 연결 없이 사용 가능 · 답안 및 오답 기록은 이 기기에만 저장</p>
+  </section>
+
+  <section id="quizView" hidden>
+    <div class="quiz-shell">
+      <div class="quiz-top"><div class="eyebrow" id="quizCategory">학습 중</div><div class="fraction" id="counter">1 / 20</div></div>
+      <div class="track"><div id="progressBar"></div></div>
+      <article class="paper">
+        <div class="question-meta"><span class="category-pill" id="questionCategory">부수 한자</span><span id="questionNumber">QUESTION 01</span></div>
+        <div class="display-hanja"><div class="hanja single" lang="zh-Hant" id="questionHero">學</div><div class="hero-tag" id="questionTag"></div></div>
+        <h2 class="stem" id="questionText">이 한자의 뜻은?</h2>
+        <div class="choices" id="options"></div>
+        <div id="feedback" class="feedback" role="status" aria-live="polite" hidden>
+          <div class="feedback-head" id="feedbackTitle"></div>
+          <p id="feedbackText"></p>
+        </div>
+      </article>
+      <div class="quiz-nav"><div class="tip">키보드: 1~4 보기 선택 · Enter 다음 문제</div>
+        <button class="btn btn-primary" id="nextBtn" type="button" hidden>다음 문제 <span aria-hidden="true">→</span></button>
+      </div>
+    </div>
+  </section>
+
+  <section id="resultView" hidden>
+    <div class="result-shell">
+      <div class="result-hero">
+        <div class="medal" aria-hidden="true" id="medal">✦</div><h2 id="resultTitle">학습 완료</h2>
+        <div class="result-ratio" id="resultRatio">0%</div>
+        <p class="result-sub" id="resultLine">정답 0문제 / 총 0문제</p>
+        <div class="result-digest" id="resultDigest"></div>
+        <div class="result-actions">
+          <button type="button" class="btn btn-primary" id="wrongAgainBtn">이번 오답만 복습</button>
+          <button type="button" class="btn btn-alt" id="newQuizBtn">새 문제 풀기</button>
+          <button type="button" class="btn btn-alt" id="backBtn">범위 선택으로</button>
+        </div>
+      </div>
+      <div class="result-panel"><h3>단원별 정답률</h3><div id="resultBars"></div></div>
+      <div class="result-panel"><h3>오답 확인</h3><div id="wrongDetail" class="wrong-list"></div></div>
+    </div>
+  </section>
+</main>
+<script>
+'use strict';
+const DATA = {"categories":[["dictionary","자전에서 한자 찾기","세 가지 색인의 핵심 원리","낯선 한자의 음·뜻 암기 없이 방법만"],["radicals","기본 부수 50","부수 ↔ 의미","모양 보고 뜻 / 뜻 보고 모양 100문제"],["variants","변형부수","원래 모습 ↔ 변형 모습","좌부변·우부방의 위치 구분"],["hermit","심은자불우","은자·시구·기승전결","오언절구와 한시 감상"],["vocab","한자 암기 53자","한자 ↔ 뜻·음","두 학습지 글자 모두, 중복 若 제외"],["parallel","한시 대구","대우법·대응·뜻","발자국 비유와 손자·할아버지 대구"],["spring","봄날 풍경","시구의 뜻·주제·형식","그림에 담을 수 없는 새소리"]],"questions":[{"id":"s0001","c":"dictionary","h":"자전 찾기","q":"한자를 자전에서 찾는 세 가지 방법으로 옳은 것은?","a":"부수색인 · 총획색인 · 자음색인","o":["부수색인 · 총획색인 · 자음색인","부수색인 · 뜻색인 · 자음색인","총획색인 · 획순색인 · 자음색인","부수색인 · 총획색인 · 획순색인"],"e":"학습지에서 배운 세 방법은 부수색인, 총획색인, 자음색인입니다.","p":3,"t":"검색 방법 이해"},{"id":"s0002","c":"dictionary","h":"자전 찾기","q":"부수색인은 무엇을 기준으로 한자를 찾는 방법인가?","a":"한자의 부수","o":["한자의 부수","전체 획수","한자의 음","글자가 쓰인 문장"],"e":"부수색인은 먼저 부수가 무엇인지 확인해 찾습니다.","p":3,"t":"검색 방법 이해"},{"id":"s0005","c":"dictionary","h":"자전 찾기","q":"부수색인으로 찾는 순서로 가장 적절한 것은?","a":"부수 찾기 → 부수 획수 확인 → 나머지 획수 확인","o":["부수 찾기 → 전체 획수 확인 → 첫 자음 확인","부수 찾기 → 부수 획수 확인 → 나머지 획수 확인","부수 찾기 → 한자 음 확인 → 뜻 확인","총획 확인 → 첫 자음 확인 → 부수 찾기"],"e":"학습지의 핵심 순서가 부수 → 부수 획수 → 나머지 획수입니다.","p":3,"t":"검색 방법 이해"},{"id":"s0006","c":"dictionary","h":"자전 찾기","q":"총획색인은 무엇을 기준으로 한자를 찾는 방법인가?","a":"한자의 전체 획수","o":["부수의 획수만","한자의 전체 획수","한자의 첫 자음","뜻이 비슷한 글자"],"e":"총획색인은 한자의 전체 획수를 세어 찾는 방법입니다.","p":3,"t":"검색 방법 이해"},{"id":"s0008","c":"dictionary","h":"자전 찾기","q":"자음색인은 무엇을 기준으로 찾는 방법인가?","a":"한자의 음(읽는 소리)","o":["한자의 음(읽는 소리)","한자의 전체 획수","부수의 모양","한자의 뜻"],"e":"자음색인은 알고 있는 한자 음의 첫 자음을 이용합니다.","p":3,"t":"검색 방법 이해"},{"id":"s0010","c":"dictionary","h":"자전 찾기","q":"한자의 음은 모르지만 부수는 알 때 적절한 방법은?","a":"부수색인","o":["부수색인","자음색인","획순색인","총획색인"],"e":"부수를 알고 있을 때는 부수색인을 활용할 수 있습니다.","p":3,"t":"검색 방법 이해"},{"id":"s0011","c":"dictionary","h":"자전 찾기","q":"한자의 음과 부수는 모르지만 전체 획수는 셀 수 있을 때 적절한 방법은?","a":"총획색인","o":["획순색인","자음색인","부수색인","총획색인"],"e":"총획색인은 부수나 음을 모르더라도 전체 획수를 세어 찾을 수 있습니다.","p":3,"t":"검색 방법 이해"},{"id":"s0012","c":"dictionary","h":"자전 찾기","q":"한자의 음을 이미 알고 있을 때 편리한 방법은?","a":"자음색인","o":["부수색인","총획색인","획순색인","자음색인"],"e":"한자의 음을 안다면 첫 자음을 이용하는 자음색인을 쓸 수 있습니다.","p":3,"t":"검색 방법 이해"},{"id":"s0013","c":"radicals","h":"一","q":"이 부수가 나타내는 뜻은?","a":"하나","o":["열","둘","하나","여덟"],"e":"一는 부수로 쓰일 때 ‘하나’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0014","c":"radicals","h":"하나","q":"이 뜻을 나타내는 부수는?","a":"一","o":["寸","一","土","二"],"e":"‘하나’에 해당하는 부수 모양은 一입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0015","c":"radicals","h":"人","q":"이 부수가 나타내는 뜻은?","a":"사람","o":["여자","말","사람","아들"],"e":"人는 부수로 쓰일 때 ‘사람’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0016","c":"radicals","h":"사람","q":"이 뜻을 나타내는 부수는?","a":"人","o":["女","人","鳥","子"],"e":"‘사람’에 해당하는 부수 모양은 人입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0017","c":"radicals","h":"刀","q":"이 부수가 나타내는 뜻은?","a":"칼","o":["활","마디","힘","칼"],"e":"刀는 부수로 쓰일 때 ‘칼’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0018","c":"radicals","h":"칼","q":"이 뜻을 나타내는 부수는?","a":"刀","o":["寸","弓","方","刀"],"e":"‘칼’에 해당하는 부수 모양은 刀입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0019","c":"radicals","h":"又","q":"이 부수가 나타내는 뜻은?","a":"또","o":["여자","아들","또","손"],"e":"又는 부수로 쓰일 때 ‘또’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0020","c":"radicals","h":"또","q":"이 뜻을 나타내는 부수는?","a":"又","o":["手","寸","女","又"],"e":"‘또’에 해당하는 부수 모양은 又입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0021","c":"radicals","h":"十","q":"이 부수가 나타내는 뜻은?","a":"열","o":["열","마디","여덟","흙"],"e":"十는 부수로 쓰일 때 ‘열’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0022","c":"radicals","h":"열","q":"이 뜻을 나타내는 부수는?","a":"十","o":["大","八","十","一"],"e":"‘열’에 해당하는 부수 모양은 十입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0023","c":"radicals","h":"二","q":"이 부수가 나타내는 뜻은?","a":"둘","o":["마디","둘","하나","여덟"],"e":"二는 부수로 쓰일 때 ‘둘’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0024","c":"radicals","h":"둘","q":"이 뜻을 나타내는 부수는?","a":"二","o":["一","土","八","二"],"e":"‘둘’에 해당하는 부수 모양은 二입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0025","c":"radicals","h":"力","q":"이 부수가 나타내는 뜻은?","a":"힘","o":["힘","마디","활","방향"],"e":"力는 부수로 쓰일 때 ‘힘’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0026","c":"radicals","h":"힘","q":"이 뜻을 나타내는 부수는?","a":"力","o":["方","寸","弓","力"],"e":"‘힘’에 해당하는 부수 모양은 力입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0027","c":"radicals","h":"八","q":"이 부수가 나타내는 뜻은?","a":"여덟","o":["여덟","열","둘","마디"],"e":"八는 부수로 쓰일 때 ‘여덟’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0028","c":"radicals","h":"여덟","q":"이 뜻을 나타내는 부수는?","a":"八","o":["八","大","寸","女"],"e":"‘여덟’에 해당하는 부수 모양은 八입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0029","c":"radicals","h":"口","q":"이 부수가 나타내는 뜻은?","a":"입","o":["입","해·날","밭","발"],"e":"口는 부수로 쓰일 때 ‘입’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0030","c":"radicals","h":"입","q":"이 뜻을 나타내는 부수는?","a":"口","o":["月","口","目","日"],"e":"‘입’에 해당하는 부수 모양은 口입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0031","c":"radicals","h":"生","q":"이 부수가 나타내는 뜻은?","a":"나다·살다","o":["나다·살다","흙","열","크다"],"e":"生는 부수로 쓰일 때 ‘나다·살다’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0032","c":"radicals","h":"나다·살다","q":"이 뜻을 나타내는 부수는?","a":"生","o":["大","十","生","立"],"e":"‘나다·살다’에 해당하는 부수 모양은 生입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0033","c":"radicals","h":"女","q":"이 부수가 나타내는 뜻은?","a":"여자","o":["여덟","사람","여자","크다"],"e":"女는 부수로 쓰일 때 ‘여자’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0034","c":"radicals","h":"여자","q":"이 뜻을 나타내는 부수는?","a":"女","o":["又","八","大","女"],"e":"‘여자’에 해당하는 부수 모양은 女입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0035","c":"radicals","h":"土","q":"이 부수가 나타내는 뜻은?","a":"흙","o":["흙","하나","나다·살다","산"],"e":"土는 부수로 쓰일 때 ‘흙’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0036","c":"radicals","h":"흙","q":"이 뜻을 나타내는 부수는?","a":"土","o":["大","田","石","土"],"e":"‘흙’에 해당하는 부수 모양은 土입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0037","c":"radicals","h":"大","q":"이 부수가 나타내는 뜻은?","a":"크다","o":["크다","흙","나다·살다","사람"],"e":"大는 부수로 쓰일 때 ‘크다’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0038","c":"radicals","h":"크다","q":"이 뜻을 나타내는 부수는?","a":"大","o":["子","大","犬","八"],"e":"‘크다’에 해당하는 부수 모양은 大입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0039","c":"radicals","h":"子","q":"이 부수가 나타내는 뜻은?","a":"아들","o":["여덟","아들","또","손"],"e":"子는 부수로 쓰일 때 ‘아들’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0040","c":"radicals","h":"아들","q":"이 뜻을 나타내는 부수는?","a":"子","o":["八","人","子","寸"],"e":"‘아들’에 해당하는 부수 모양은 子입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0041","c":"radicals","h":"弓","q":"이 부수가 나타내는 뜻은?","a":"활","o":["칼","힘","활","방향"],"e":"弓는 부수로 쓰일 때 ‘활’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0042","c":"radicals","h":"활","q":"이 뜻을 나타내는 부수는?","a":"弓","o":["弓","刀","方","力"],"e":"‘활’에 해당하는 부수 모양은 弓입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0043","c":"radicals","h":"山","q":"이 부수가 나타내는 뜻은?","a":"산","o":["밭","산","흙","구멍"],"e":"山는 부수로 쓰일 때 ‘산’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0044","c":"radicals","h":"산","q":"이 뜻을 나타내는 부수는?","a":"山","o":["山","石","田","土"],"e":"‘산’에 해당하는 부수 모양은 山입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0045","c":"radicals","h":"寸","q":"이 부수가 나타내는 뜻은?","a":"마디","o":["마디","여덟","힘","칼"],"e":"寸는 부수로 쓰일 때 ‘마디’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0046","c":"radicals","h":"마디","q":"이 뜻을 나타내는 부수는?","a":"寸","o":["寸","二","土","刀"],"e":"‘마디’에 해당하는 부수 모양은 寸입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0047","c":"radicals","h":"木","q":"이 부수가 나타내는 뜻은?","a":"나무","o":["벼","쌀","대나무","나무"],"e":"木는 부수로 쓰일 때 ‘나무’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0048","c":"radicals","h":"나무","q":"이 뜻을 나타내는 부수는?","a":"木","o":["木","竹","米","禾"],"e":"‘나무’에 해당하는 부수 모양은 木입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0049","c":"radicals","h":"心","q":"이 부수가 나타내는 뜻은?","a":"마음","o":["마음","귀","눈","손"],"e":"心는 부수로 쓰일 때 ‘마음’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0050","c":"radicals","h":"마음","q":"이 뜻을 나타내는 부수는?","a":"心","o":["目","火","心","耳"],"e":"‘마음’에 해당하는 부수 모양은 心입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0051","c":"radicals","h":"日","q":"이 부수가 나타내는 뜻은?","a":"해·날","o":["불","눈","해·날","입"],"e":"日는 부수로 쓰일 때 ‘해·날’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0052","c":"radicals","h":"해·날","q":"이 뜻을 나타내는 부수는?","a":"日","o":["水","日","雨","月"],"e":"‘해·날’에 해당하는 부수 모양은 日입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0053","c":"radicals","h":"手","q":"이 부수가 나타내는 뜻은?","a":"손","o":["손","마음","눈","아들"],"e":"手는 부수로 쓰일 때 ‘손’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0054","c":"radicals","h":"손","q":"이 뜻을 나타내는 부수는?","a":"手","o":["心","寸","手","耳"],"e":"‘손’에 해당하는 부수 모양은 手입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0055","c":"radicals","h":"火","q":"이 부수가 나타내는 뜻은?","a":"불","o":["불","달","해·날","비"],"e":"火는 부수로 쓰일 때 ‘불’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0056","c":"radicals","h":"불","q":"이 뜻을 나타내는 부수는?","a":"火","o":["水","日","月","火"],"e":"‘불’에 해당하는 부수 모양은 火입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0057","c":"radicals","h":"犬","q":"이 부수가 나타내는 뜻은?","a":"개","o":["개","새","말","사람"],"e":"犬는 부수로 쓰일 때 ‘개’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0058","c":"radicals","h":"개","q":"이 뜻을 나타내는 부수는?","a":"犬","o":["鳥","人","犬","大"],"e":"‘개’에 해당하는 부수 모양은 犬입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0059","c":"radicals","h":"月","q":"이 부수가 나타내는 뜻은?","a":"달","o":["해·날","물","눈","달"],"e":"月는 부수로 쓰일 때 ‘달’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0060","c":"radicals","h":"달","q":"이 뜻을 나타내는 부수는?","a":"月","o":["日","月","火","雨"],"e":"‘달’에 해당하는 부수 모양은 月입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0061","c":"radicals","h":"方","q":"이 부수가 나타내는 뜻은?","a":"방향","o":["활","방향","힘","칼"],"e":"方는 부수로 쓰일 때 ‘방향’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0062","c":"radicals","h":"방향","q":"이 뜻을 나타내는 부수는?","a":"方","o":["立","方","弓","力"],"e":"‘방향’에 해당하는 부수 모양은 方입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0063","c":"radicals","h":"水","q":"이 부수가 나타내는 뜻은?","a":"물","o":["달","물","해·날","불"],"e":"水는 부수로 쓰일 때 ‘물’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0064","c":"radicals","h":"물","q":"이 뜻을 나타내는 부수는?","a":"水","o":["雨","火","日","水"],"e":"‘물’에 해당하는 부수 모양은 水입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0065","c":"radicals","h":"鳥","q":"이 부수가 나타내는 뜻은?","a":"새","o":["말","새","개","사람"],"e":"鳥는 부수로 쓰일 때 ‘새’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0066","c":"radicals","h":"새","q":"이 뜻을 나타내는 부수는?","a":"鳥","o":["鳥","犬","見","馬"],"e":"‘새’에 해당하는 부수 모양은 鳥입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0067","c":"radicals","h":"目","q":"이 부수가 나타내는 뜻은?","a":"눈","o":["입","발","달","눈"],"e":"目는 부수로 쓰일 때 ‘눈’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0068","c":"radicals","h":"눈","q":"이 뜻을 나타내는 부수는?","a":"目","o":["口","日","目","田"],"e":"‘눈’에 해당하는 부수 모양은 目입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0069","c":"radicals","h":"示","q":"이 부수가 나타내는 뜻은?","a":"제사·보이다","o":["서다","옷","제사·보이다","말씀"],"e":"示는 부수로 쓰일 때 ‘제사·보이다’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0070","c":"radicals","h":"제사·보이다","q":"이 뜻을 나타내는 부수는?","a":"示","o":["言","示","立","衣"],"e":"‘제사·보이다’에 해당하는 부수 모양은 示입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0071","c":"radicals","h":"田","q":"이 부수가 나타내는 뜻은?","a":"밭","o":["산","구멍","해·날","밭"],"e":"田는 부수로 쓰일 때 ‘밭’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0072","c":"radicals","h":"밭","q":"이 뜻을 나타내는 부수는?","a":"田","o":["田","穴","石","日"],"e":"‘밭’에 해당하는 부수 모양은 田입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0073","c":"radicals","h":"石","q":"이 부수가 나타내는 뜻은?","a":"돌","o":["구멍","돌","조개·재물","흙"],"e":"石는 부수로 쓰일 때 ‘돌’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0074","c":"radicals","h":"돌","q":"이 뜻을 나타내는 부수는?","a":"石","o":["穴","石","山","金"],"e":"‘돌’에 해당하는 부수 모양은 石입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0075","c":"radicals","h":"行","q":"이 부수가 나타내는 뜻은?","a":"가다","o":["보다","가다","옷","서다"],"e":"行는 부수로 쓰일 때 ‘가다’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0076","c":"radicals","h":"가다","q":"이 뜻을 나타내는 부수는?","a":"行","o":["見","行","立","衣"],"e":"‘가다’에 해당하는 부수 모양은 行입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0077","c":"radicals","h":"穴","q":"이 부수가 나타내는 뜻은?","a":"구멍","o":["구멍","산","돌","밭"],"e":"穴는 부수로 쓰일 때 ‘구멍’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0078","c":"radicals","h":"구멍","q":"이 뜻을 나타내는 부수는?","a":"穴","o":["山","土","田","穴"],"e":"‘구멍’에 해당하는 부수 모양은 穴입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0079","c":"radicals","h":"立","q":"이 부수가 나타내는 뜻은?","a":"서다","o":["보다","제사·보이다","크다","서다"],"e":"立는 부수로 쓰일 때 ‘서다’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0080","c":"radicals","h":"서다","q":"이 뜻을 나타내는 부수는?","a":"立","o":["立","生","十","見"],"e":"‘서다’에 해당하는 부수 모양은 立입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0081","c":"radicals","h":"禾","q":"이 부수가 나타내는 뜻은?","a":"벼","o":["쌀","나무","대나무","벼"],"e":"禾는 부수로 쓰일 때 ‘벼’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0082","c":"radicals","h":"벼","q":"이 뜻을 나타내는 부수는?","a":"禾","o":["木","竹","米","禾"],"e":"‘벼’에 해당하는 부수 모양은 禾입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0083","c":"radicals","h":"衣","q":"이 부수가 나타내는 뜻은?","a":"옷","o":["가다","먹다·음식","제사·보이다","옷"],"e":"衣는 부수로 쓰일 때 ‘옷’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0084","c":"radicals","h":"옷","q":"이 뜻을 나타내는 부수는?","a":"衣","o":["肉","言","行","衣"],"e":"‘옷’에 해당하는 부수 모양은 衣입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0085","c":"radicals","h":"竹","q":"이 부수가 나타내는 뜻은?","a":"대나무","o":["쌀","대나무","벼","나무"],"e":"竹는 부수로 쓰일 때 ‘대나무’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0086","c":"radicals","h":"대나무","q":"이 뜻을 나타내는 부수는?","a":"竹","o":["米","竹","木","禾"],"e":"‘대나무’에 해당하는 부수 모양은 竹입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0087","c":"radicals","h":"米","q":"이 부수가 나타내는 뜻은?","a":"쌀","o":["벼","대나무","나무","쌀"],"e":"米는 부수로 쓰일 때 ‘쌀’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0088","c":"radicals","h":"쌀","q":"이 뜻을 나타내는 부수는?","a":"米","o":["米","竹","木","禾"],"e":"‘쌀’에 해당하는 부수 모양은 米입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0089","c":"radicals","h":"肉","q":"이 부수가 나타내는 뜻은?","a":"고기","o":["먹다·음식","눈","옷","고기"],"e":"肉는 부수로 쓰일 때 ‘고기’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0090","c":"radicals","h":"고기","q":"이 뜻을 나타내는 부수는?","a":"肉","o":["耳","衣","肉","手"],"e":"‘고기’에 해당하는 부수 모양은 肉입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0091","c":"radicals","h":"耳","q":"이 부수가 나타내는 뜻은?","a":"귀","o":["입","마음","귀","고기"],"e":"耳는 부수로 쓰일 때 ‘귀’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0092","c":"radicals","h":"귀","q":"이 뜻을 나타내는 부수는?","a":"耳","o":["心","耳","肉","手"],"e":"‘귀’에 해당하는 부수 모양은 耳입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0093","c":"radicals","h":"車","q":"이 부수가 나타내는 뜻은?","a":"수레","o":["문","조개·재물","수레","보다"],"e":"車는 부수로 쓰일 때 ‘수레’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0094","c":"radicals","h":"수레","q":"이 뜻을 나타내는 부수는?","a":"車","o":["貝","見","田","車"],"e":"‘수레’에 해당하는 부수 모양은 車입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0095","c":"radicals","h":"見","q":"이 부수가 나타내는 뜻은?","a":"보다","o":["조개·재물","옷","보다","서다"],"e":"見는 부수로 쓰일 때 ‘보다’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0096","c":"radicals","h":"보다","q":"이 뜻을 나타내는 부수는?","a":"見","o":["目","門","見","耳"],"e":"‘보다’에 해당하는 부수 모양은 見입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0097","c":"radicals","h":"足","q":"이 부수가 나타내는 뜻은?","a":"발","o":["입","눈","귀","발"],"e":"足는 부수로 쓰일 때 ‘발’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0098","c":"radicals","h":"발","q":"이 뜻을 나타내는 부수는?","a":"足","o":["足","口","行","手"],"e":"‘발’에 해당하는 부수 모양은 足입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0099","c":"radicals","h":"貝","q":"이 부수가 나타내는 뜻은?","a":"조개·재물","o":["돌","먹다·음식","조개·재물","문"],"e":"貝는 부수로 쓰일 때 ‘조개·재물’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0100","c":"radicals","h":"조개·재물","q":"이 뜻을 나타내는 부수는?","a":"貝","o":["食","貝","見","石"],"e":"‘조개·재물’에 해당하는 부수 모양은 貝입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0101","c":"radicals","h":"言","q":"이 부수가 나타내는 뜻은?","a":"말씀","o":["제사·보이다","서다","옷","말씀"],"e":"言는 부수로 쓰일 때 ‘말씀’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0102","c":"radicals","h":"말씀","q":"이 뜻을 나타내는 부수는?","a":"言","o":["示","衣","門","言"],"e":"‘말씀’에 해당하는 부수 모양은 言입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0103","c":"radicals","h":"門","q":"이 부수가 나타내는 뜻은?","a":"문","o":["수레","조개·재물","보다","문"],"e":"門는 부수로 쓰일 때 ‘문’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0104","c":"radicals","h":"문","q":"이 뜻을 나타내는 부수는?","a":"門","o":["日","貝","門","車"],"e":"‘문’에 해당하는 부수 모양은 門입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0105","c":"radicals","h":"金","q":"이 부수가 나타내는 뜻은?","a":"쇠·금","o":["먹다·음식","조개·재물","쇠·금","돌"],"e":"金는 부수로 쓰일 때 ‘쇠·금’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0106","c":"radicals","h":"쇠·금","q":"이 뜻을 나타내는 부수는?","a":"金","o":["食","石","貝","金"],"e":"‘쇠·금’에 해당하는 부수 모양은 金입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0107","c":"radicals","h":"雨","q":"이 부수가 나타내는 뜻은?","a":"비","o":["달","비","불","물"],"e":"雨는 부수로 쓰일 때 ‘비’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0108","c":"radicals","h":"비","q":"이 뜻을 나타내는 부수는?","a":"雨","o":["火","水","日","雨"],"e":"‘비’에 해당하는 부수 모양은 雨입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0109","c":"radicals","h":"食","q":"이 부수가 나타내는 뜻은?","a":"먹다·음식","o":["조개·재물","고기","먹다·음식","옷"],"e":"食는 부수로 쓰일 때 ‘먹다·음식’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0110","c":"radicals","h":"먹다·음식","q":"이 뜻을 나타내는 부수는?","a":"食","o":["金","肉","食","衣"],"e":"‘먹다·음식’에 해당하는 부수 모양은 食입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0111","c":"radicals","h":"馬","q":"이 부수가 나타내는 뜻은?","a":"말","o":["새","사람","개","말"],"e":"馬는 부수로 쓰일 때 ‘말’과 관련된 뜻을 나타내요.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0112","c":"radicals","h":"말","q":"이 뜻을 나타내는 부수는?","a":"馬","o":["人","犬","車","馬"],"e":"‘말’에 해당하는 부수 모양은 馬입니다.","p":4,"t":"부수 의미 ↔ 모양"},{"id":"s0113","c":"variants","h":"人","q":"기본 부수인 이 한자가 왼쪽에서 부수로 변형될 때 알맞은 모양은?","a":"亻","o":["亻","氵","阝(오른쪽)","艹"],"e":"사람 인(人)이 한자의 왼쪽에서 亻으로 바뀝니다.","p":4,"t":"원래 → 변형"},{"id":"s0114","c":"variants","h":"亻","q":"이 변형부수의 원래 한자는?","a":"人","o":["竹","人","刀","水"],"e":"사람 인(人)이 한자의 왼쪽에서 亻으로 바뀝니다.","p":4,"t":"변형 → 원래"},{"id":"s0115","c":"variants","h":"水","q":"기본 부수인 이 한자가 왼쪽에서 부수로 변형될 때 알맞은 모양은?","a":"氵","o":["氵","艹","亻","灬"],"e":"물 수(水)가 왼쪽에서 氵으로 바뀝니다.","p":4,"t":"원래 → 변형"},{"id":"s0116","c":"variants","h":"氵","q":"이 변형부수의 원래 한자는?","a":"水","o":["肉","阜","艸","水"],"e":"물 수(水)가 왼쪽에서 氵으로 바뀝니다.","p":4,"t":"변형 → 원래"},{"id":"s0117","c":"variants","h":"心","q":"기본 부수인 이 한자가 왼쪽에서 부수로 변형될 때 알맞은 모양은?","a":"忄","o":["忄","亻","月","阝(왼쪽)"],"e":"마음 심(心)이 왼쪽에서 忄으로 바뀝니다.","p":4,"t":"원래 → 변형"},{"id":"s0118","c":"variants","h":"忄","q":"이 변형부수의 원래 한자는?","a":"心","o":["艸","水","人","心"],"e":"마음 심(心)이 왼쪽에서 忄으로 바뀝니다.","p":4,"t":"변형 → 원래"},{"id":"s0119","c":"variants","h":"手","q":"기본 부수인 이 한자가 왼쪽에서 부수로 변형될 때 알맞은 모양은?","a":"扌","o":["犭","亻","扌","灬"],"e":"손 수(手)가 왼쪽에서 扌으로 바뀝니다.","p":4,"t":"원래 → 변형"},{"id":"s0120","c":"variants","h":"扌","q":"이 변형부수의 원래 한자는?","a":"手","o":["竹","手","心","犬"],"e":"손 수(手)가 왼쪽에서 扌으로 바뀝니다.","p":4,"t":"변형 → 원래"},{"id":"s0121","c":"variants","h":"犬","q":"기본 부수인 이 한자가 왼쪽에서 부수로 변형될 때 알맞은 모양은?","a":"犭","o":["犭","扌","阝(오른쪽)","刂"],"e":"개 견(犬)이 왼쪽에서 犭으로 바뀝니다.","p":4,"t":"원래 → 변형"},{"id":"s0122","c":"variants","h":"犭","q":"이 변형부수의 원래 한자는?","a":"犬","o":["阜","人","水","犬"],"e":"개 견(犬)이 왼쪽에서 犭으로 바뀝니다.","p":4,"t":"변형 → 원래"},{"id":"s0123","c":"variants","h":"肉","q":"기본 부수인 이 한자가 왼쪽에서 부수로 변형될 때 알맞은 모양은?","a":"月","o":["阝(오른쪽)","灬","刂","月"],"e":"고기 육(肉)이 왼쪽 부수로 쓰일 때 月 모양이 됩니다.","p":4,"t":"원래 → 변형"},{"id":"s0124","c":"variants","h":"脫","q":"‘脫(벗을 탈)’의 왼쪽에 月처럼 보이는 부수가 있어. 그 부수의 원래 형태는?","a":"肉","o":["月","肉","心","水"],"e":"‘脫’의 왼쪽에 있는 月 모양은 ‘달 월’이 아니라, 肉에서 변한 육달월변입니다.","p":4,"t":"예시 속 육달월변 찾기"},{"id":"s0125","c":"variants","h":"刀","q":"기본 부수인 이 한자가 오른쪽에서 부수로 변형될 때 알맞은 모양은?","a":"刂","o":["艹","刂","月","氵"],"e":"칼 도(刀)가 오른쪽에서 刂으로 바뀝니다.","p":4,"t":"원래 → 변형"},{"id":"s0126","c":"variants","h":"刂","q":"이 변형부수의 원래 한자는?","a":"刀","o":["刀","竹","犬","火"],"e":"칼 도(刀)가 오른쪽에서 刂으로 바뀝니다.","p":4,"t":"변형 → 원래"},{"id":"s0127","c":"variants","h":"艸","q":"기본 부수인 이 한자가 위쪽에서 부수로 변형될 때 알맞은 모양은?","a":"艹","o":["刂","忄","阝(왼쪽)","艹"],"e":"풀 초(艸)가 한자의 위쪽에서 艹으로 바뀝니다.","p":4,"t":"원래 → 변형"},{"id":"s0128","c":"variants","h":"艹","q":"이 변형부수의 원래 한자는?","a":"艸","o":["阜","竹","艸","水"],"e":"풀 초(艸)가 한자의 위쪽에서 艹으로 바뀝니다.","p":4,"t":"변형 → 원래"},{"id":"s0129","c":"variants","h":"竹","q":"기본 부수인 이 한자가 위쪽에서 부수로 변형될 때 알맞은 모양은?","a":"⺮","o":["犭","扌","阝(오른쪽)","⺮"],"e":"대 죽(竹)이 한자의 위쪽에서 ⺮으로 바뀝니다.","p":4,"t":"원래 → 변형"},{"id":"s0130","c":"variants","h":"⺮","q":"이 변형부수의 원래 한자는?","a":"竹","o":["手","水","肉","竹"],"e":"대 죽(竹)이 한자의 위쪽에서 ⺮으로 바뀝니다.","p":4,"t":"변형 → 원래"},{"id":"s0131","c":"variants","h":"火","q":"기본 부수인 이 한자가 아래쪽에서 부수로 변형될 때 알맞은 모양은?","a":"灬","o":["艹","亻","灬","氵"],"e":"불 화(火)가 한자의 아래쪽에서 灬으로 바뀝니다.","p":4,"t":"원래 → 변형"},{"id":"s0132","c":"variants","h":"灬","q":"이 변형부수의 원래 한자는?","a":"火","o":["邑","心","人","火"],"e":"불 화(火)가 한자의 아래쪽에서 灬으로 바뀝니다.","p":4,"t":"변형 → 원래"},{"id":"s0133","c":"variants","h":"阜","q":"기본 부수인 이 한자가 왼쪽에서 부수로 변형될 때 알맞은 모양은?","a":"阝(왼쪽)","o":["⺮","艹","灬","阝(왼쪽)"],"e":"언덕 부(阜)가 왼쪽에서 阝으로 바뀝니다.","p":4,"t":"원래 → 변형"},{"id":"s0134","c":"variants","h":"阝(왼쪽)","q":"이 변형부수의 원래 한자는?","a":"阜","o":["水","肉","阜","心"],"e":"언덕 부(阜)가 왼쪽에서 阝으로 바뀝니다.","p":4,"t":"변형 → 원래"},{"id":"s0135","c":"variants","h":"邑","q":"기본 부수인 이 한자가 오른쪽에서 부수로 변형될 때 알맞은 모양은?","a":"阝(오른쪽)","o":["阝(오른쪽)","氵","刂","忄"],"e":"고을 읍(邑)이 오른쪽에서 阝으로 바뀝니다.","p":4,"t":"원래 → 변형"},{"id":"s0136","c":"variants","h":"阝(오른쪽)","q":"이 변형부수의 원래 한자는?","a":"邑","o":["水","肉","邑","人"],"e":"고을 읍(邑)이 오른쪽에서 阝으로 바뀝니다.","p":4,"t":"변형 → 원래"},{"id":"s0137","c":"variants","h":"좌부변과 우부방","q":"阝이 한자의 왼쪽에 있을 때의 이름과 원래 한자는?","a":"좌부변 · 阜","o":["삼수변 · 水","칼도방 · 刀","좌부변 · 阜","우부방 · 邑"],"e":"왼쪽의 阝은 언덕 부(阜)에서 변한 좌부변입니다.","p":4,"t":"자주 헷갈리는 변형부수"},{"id":"s0138","c":"variants","h":"좌부변과 우부방","q":"阝이 한자의 오른쪽에 있을 때의 이름과 원래 한자는?","a":"우부방 · 邑","o":["우부방 · 邑","사람인변 · 人","육달월변 · 肉","좌부변 · 阜"],"e":"오른쪽의 阝은 고을 읍(邑)에서 변한 우부방입니다.","p":4,"t":"자주 헷갈리는 변형부수"},{"id":"s0139","c":"hermit","h":"尋隱者不遇","q":"이 한시의 제목을 우리말 음으로 읽으면?","a":"심은자불우","o":["심은자불우","상경","춘래불사춘","춘야희우"],"e":"尋隱者不遇는 ‘은자를 찾았으나 만나지 못함’이라는 뜻입니다.","p":3,"t":"한시 감상 · 해석"},{"id":"s0140","c":"hermit","h":"隱者","q":"이 한자의 뜻으로 알맞은 것은?","a":"세속을 떠나 숨어 지내는 사람","o":["나라를 다스리는 임금","세속을 떠나 숨어 지내는 사람","약초를 파는 상인","글을 배우는 어린 제자"],"e":"은자(隱者)는 세속을 멀리하고 숨어 지내는 사람을 뜻합니다.","p":5,"t":"한시 감상 · 해석"},{"id":"s0141","c":"hermit","h":"尋隱者不遇","q":"이 시를 지은 사람은?","a":"가도(賈島)","o":["김병연","이백","가도(賈島)","두보"],"e":"학습지에는 중국 당나라 시인 가도(賈島)의 작품으로 제시됩니다.","p":3,"t":"한시 감상 · 해석"},{"id":"s0142","c":"hermit","h":"起承轉結","q":"이 한시의 시상 전개 방식은?","a":"기승전결","o":["역순 구성","시간의 역행","선경후정","기승전결"],"e":"학습지 하단의 ‘한시 감상’은 시상 전개를 기·승·전·결로 나눕니다.","p":5,"t":"한시 감상 · 해석"},{"id":"s0143","c":"hermit","h":"五言絶句","q":"「심은자불우」의 형식으로 알맞은 것은?","a":"오언절구","o":["칠언율시","오언율시","칠언절구","오언절구"],"e":"한 구절이 다섯 글자이고 모두 네 구절이므로 오언절구입니다.","p":5,"t":"한시 감상 · 해석"},{"id":"s0144","c":"hermit","h":"尋隱者不遇","q":"제목의 뜻으로 알맞은 것은?","a":"은자를 찾아갔으나 만나지 못함","o":["스승과 함께 약초를 캔다는 뜻","은자를 찾아갔으나 만나지 못함","산에 숨어 지내는 사람을 만남","은자를 만나 산에서 돌아옴"],"e":"尋(찾다), 隱者(은자), 不遇(만나지 못하다)의 뜻을 연결하면 됩니다.","p":3,"t":"한시 감상 · 해석"},{"id":"s0145","c":"hermit","h":"童子","q":"시 속의 ‘童子’는 누구인가?","a":"은자의 어린 제자","o":["은자의 어린 제자","산속에 있는 다른 은자","은자를 찾아간 화자","은자의 스승"],"e":"동자는 스승이 약초를 캐러 갔다고 화자에게 말해 줍니다.","p":3,"t":"한시 감상 · 해석"},{"id":"s0146","c":"hermit","h":"採藥","q":"‘採藥’이 가리키는 행동은?","a":"약초를 캐다","o":["약초를 심다","약초를 달이다","약초를 캐다","약초를 먹다"],"e":"採는 캐다, 藥은 약초 또는 약을 뜻합니다.","p":3,"t":"한시 감상 · 해석"},{"id":"s0147","c":"hermit","h":"松下問童子","q":"이 시구의 뜻으로 알맞은 것은?","a":"소나무 아래에서 동자에게 물음","o":["다만 이 산속에 계시지만","소나무 아래에서 동자에게 물음","구름이 깊어 어디 계신지 알지 못함","스승이 약초를 캐러 갔다고 말함"],"e":"소나무 아래에서 동자에게 묻는 장면으로, 기(起)에 해당합니다.","p":5,"t":"한시 감상 · 해석"},{"id":"s0148","c":"hermit","h":"言師採藥去","q":"이 시구의 뜻으로 알맞은 것은?","a":"스승이 약초를 캐러 갔다고 말함","o":["다만 이 산속에 계시지만","소나무 아래에서 동자에게 물음","스승이 약초를 캐러 갔다고 말함","구름이 깊어 어디 계신지 알지 못함"],"e":"동자가 스승이 약초를 캐러 갔다고 대답하는 장면으로, 승(承)에 해당합니다.","p":5,"t":"한시 감상 · 해석"},{"id":"s0149","c":"hermit","h":"只在此山中","q":"이 시구의 뜻으로 알맞은 것은?","a":"다만 이 산속에 계시지만","o":["소나무 아래에서 동자에게 물음","스승이 약초를 캐러 갔다고 말함","구름이 깊어 어디 계신지 알지 못함","다만 이 산속에 계시지만"],"e":"동자는 스승이 이 산 안에 있다고 말합니다. 전(轉)에 해당합니다.","p":5,"t":"한시 감상 · 해석"},{"id":"s0150","c":"hermit","h":"雲深不知處","q":"이 시구의 뜻으로 알맞은 것은?","a":"구름이 깊어 어디 계신지 알지 못함","o":["구름이 깊어 어디 계신지 알지 못함","스승이 약초를 캐러 갔다고 말함","소나무 아래에서 동자에게 물음","다만 이 산속에 계시지만"],"e":"구름이 깊어 스승이 있는 곳을 알지 못한다는 말로, 결(結)에 해당합니다.","p":5,"t":"한시 감상 · 해석"},{"id":"s0151","c":"hermit","h":"雲深不知處","q":"이 구절에 나타난 화자의 상황은?","a":"은자가 있는 곳을 끝내 알지 못함","o":["은자가 이미 산을 내려왔음을 알게 됨","은자가 있는 곳을 알아내 찾아감","동자에게서 약초를 전달받음","은자가 있는 곳을 끝내 알지 못함"],"e":"구름이 깊어 은자가 있는 곳을 알 수 없음을 표현합니다.","p":3,"t":"한시 감상 · 해석"},{"id":"s0152","c":"hermit","h":"尋隱者不遇","q":"이 한시에서 화자가 느꼈을 마음으로 가장 적절한 것은?","a":"은자를 만나지 못한 아쉬움","o":["은자를 만나지 못한 아쉬움","산속에서 길을 잃은 두려움","동자에게 가르침을 준 뿌듯함","약초를 구하지 못한 안타까움"],"e":"화자는 은자를 찾아갔지만 어디 있는지 몰라 만나지 못합니다.","p":5,"t":"한시 감상 · 해석"},{"id":"s0154","c":"vocab","h":"常","q":"이 한자의 뜻은?","a":"항상","o":["저녁","반드시","아침","항상"],"e":"常의 학습지 뜻은 ‘항상’입니다.","p":4,"t":"소나무 아래에서-3 · 뜻"},{"id":"s0155","c":"vocab","h":"常","q":"이 한자의 음은?","a":"상","o":["석","신","상","순"],"e":"常의 학습지 음은 ‘상’입니다.","p":4,"t":"소나무 아래에서-3 · 음"},{"id":"s0156","c":"vocab","h":"帝","q":"이 한자의 뜻은?","a":"임금","o":["성씨","항상","이름","임금"],"e":"帝의 학습지 뜻은 ‘임금’입니다.","p":4,"t":"소나무 아래에서-3 · 뜻"},{"id":"s0157","c":"vocab","h":"帝","q":"이 한자의 음은?","a":"제","o":["조","저","집","제"],"e":"帝의 학습지 음은 ‘제’입니다.","p":4,"t":"소나무 아래에서-3 · 음"},{"id":"s0158","c":"vocab","h":"希","q":"이 한자의 뜻은?","a":"바라다","o":["바라다","나타나다","보다","밝다"],"e":"希의 학습지 뜻은 ‘바라다’입니다.","p":4,"t":"소나무 아래에서-3 · 뜻"},{"id":"s0159","c":"vocab","h":"希","q":"이 한자의 음은?","a":"희","o":["환","희","현","향"],"e":"希의 학습지 음은 ‘희’입니다.","p":4,"t":"소나무 아래에서-3 · 음"},{"id":"s0160","c":"vocab","h":"君","q":"이 한자의 뜻은?","a":"임금","o":["장사","성씨","의원","임금"],"e":"君의 학습지 뜻은 ‘임금’입니다.","p":4,"t":"소나무 아래에서-3 · 뜻"},{"id":"s0161","c":"vocab","h":"君","q":"이 한자의 음은?","a":"군","o":["관","감","경","군"],"e":"君의 학습지 음은 ‘군’입니다.","p":4,"t":"소나무 아래에서-3 · 음"},{"id":"s0162","c":"vocab","h":"房","q":"이 한자의 뜻은?","a":"방","o":["거리","방","서울","시골"],"e":"房의 학습지 뜻은 ‘방’입니다.","p":4,"t":"소나무 아래에서-3 · 뜻"},{"id":"s0163","c":"vocab","h":"房","q":"이 한자의 음은?","a":"방","o":["가","방","상","발"],"e":"房의 학습지 음은 ‘방’입니다.","p":4,"t":"소나무 아래에서-3 · 음"},{"id":"s0164","c":"vocab","h":"醫","q":"이 한자의 뜻은?","a":"의원","o":["장사","의원","임금","성씨"],"e":"醫의 학습지 뜻은 ‘의원’입니다.","p":4,"t":"소나무 아래에서-3 · 뜻"},{"id":"s0165","c":"vocab","h":"醫","q":"이 한자의 음은?","a":"의","o":["약","의","애","이"],"e":"醫의 학습지 음은 ‘의’입니다.","p":4,"t":"소나무 아래에서-3 · 음"},{"id":"s0166","c":"vocab","h":"性","q":"이 한자의 뜻은?","a":"성품","o":["성씨","성품","항상","이름"],"e":"性의 학습지 뜻은 ‘성품’입니다.","p":4,"t":"소나무 아래에서-3 · 뜻"},{"id":"s0167","c":"vocab","h":"性","q":"이 한자의 음은?","a":"성","o":["순","성","신","사"],"e":"性의 학습지 음은 ‘성’입니다.","p":4,"t":"소나무 아래에서-3 · 음"},{"id":"s0168","c":"vocab","h":"姓","q":"이 한자의 뜻은?","a":"성씨","o":["이름","성씨","성품","임금"],"e":"姓의 학습지 뜻은 ‘성씨’입니다.","p":4,"t":"소나무 아래에서-3 · 뜻"},{"id":"s0169","c":"vocab","h":"姓","q":"이 한자의 음은?","a":"성","o":["사","성","석","순"],"e":"姓의 학습지 음은 ‘성’입니다.","p":4,"t":"소나무 아래에서-3 · 음"},{"id":"s0170","c":"vocab","h":"名","q":"이 한자의 뜻은?","a":"이름","o":["차례","이름","부르다","성품"],"e":"名의 학습지 뜻은 ‘이름’입니다.","p":4,"t":"소나무 아래에서-3 · 뜻"},{"id":"s0171","c":"vocab","h":"名","q":"이 한자의 음은?","a":"명","o":["명","만","현","경"],"e":"名의 학습지 음은 ‘명’입니다.","p":4,"t":"소나무 아래에서-3 · 음"},{"id":"s0172","c":"vocab","h":"集","q":"이 한자의 뜻은?","a":"모이다","o":["모이다","더하다","참여하다","거느리다"],"e":"集의 학습지 뜻은 ‘모이다’입니다.","p":4,"t":"소나무 아래에서-3 · 뜻"},{"id":"s0173","c":"vocab","h":"集","q":"이 한자의 음은?","a":"집","o":["집","전","죄","제"],"e":"集의 학습지 음은 ‘집’입니다.","p":4,"t":"소나무 아래에서-3 · 음"},{"id":"s0174","c":"vocab","h":"參","q":"이 한자의 뜻은?","a":"참여하다","o":["참여하다","거느리다","더하다","일만"],"e":"參의 학습지 뜻은 ‘참여하다’입니다.","p":4,"t":"소나무 아래에서-3 · 뜻"},{"id":"s0175","c":"vocab","h":"參","q":"이 한자의 음은?","a":"참","o":["방","참","락","사"],"e":"參의 학습지 음은 ‘참’입니다.","p":4,"t":"소나무 아래에서-3 · 음"},{"id":"s0176","c":"vocab","h":"加","q":"이 한자의 뜻은?","a":"더하다","o":["더하다","모이다","거느리다","참여하다"],"e":"加의 학습지 뜻은 ‘더하다’입니다.","p":4,"t":"소나무 아래에서-3 · 뜻"},{"id":"s0177","c":"vocab","h":"加","q":"이 한자의 음은?","a":"가","o":["경","계","감","가"],"e":"加의 학습지 음은 ‘가’입니다.","p":4,"t":"소나무 아래에서-3 · 음"},{"id":"s0178","c":"vocab","h":"皇","q":"이 한자의 뜻은?","a":"임금","o":["성씨","이름","임금","항상"],"e":"皇의 학습지 뜻은 ‘임금’입니다.","p":4,"t":"소나무 아래에서-3 · 뜻"},{"id":"s0179","c":"vocab","h":"皇","q":"이 한자의 음은?","a":"황","o":["황","현","희","호"],"e":"皇의 학습지 음은 ‘황’입니다.","p":4,"t":"소나무 아래에서-3 · 음"},{"id":"s0180","c":"vocab","h":"發","q":"이 한자의 뜻은?","a":"펴다","o":["펴다","만약","겉","바라다"],"e":"發의 학습지 뜻은 ‘펴다’입니다.","p":4,"t":"소나무 아래에서-3 · 뜻"},{"id":"s0181","c":"vocab","h":"發","q":"이 한자의 음은?","a":"발","o":["발","참","방","만"],"e":"發의 학습지 음은 ‘발’입니다.","p":4,"t":"소나무 아래에서-3 · 음"},{"id":"s0182","c":"vocab","h":"表","q":"이 한자의 뜻은?","a":"겉","o":["겉","나타나다","펴다","있다"],"e":"表의 학습지 뜻은 ‘겉’입니다.","p":4,"t":"소나무 아래에서-3 · 뜻"},{"id":"s0183","c":"vocab","h":"表","q":"이 한자의 음은?","a":"표","o":["저","료","고","표"],"e":"表의 학습지 음은 ‘표’입니다.","p":4,"t":"소나무 아래에서-3 · 음"},{"id":"s0184","c":"vocab","h":"京","q":"이 한자의 뜻은?","a":"서울","o":["방","서울","시골","거리"],"e":"京의 학습지 뜻은 ‘서울’입니다.","p":4,"t":"소나무 아래에서-3 · 뜻"},{"id":"s0185","c":"vocab","h":"京","q":"이 한자의 음은?","a":"경","o":["고","경","군","계"],"e":"京의 학습지 음은 ‘경’입니다.","p":4,"t":"소나무 아래에서-3 · 음"},{"id":"s0186","c":"vocab","h":"鄕","q":"이 한자의 뜻은?","a":"시골","o":["방","거리","서울","시골"],"e":"鄕의 학습지 뜻은 ‘시골’입니다.","p":4,"t":"소나무 아래에서-3 · 뜻"},{"id":"s0187","c":"vocab","h":"鄕","q":"이 한자의 음은?","a":"향","o":["황","환","희","향"],"e":"鄕의 학습지 음은 ‘향’입니다.","p":4,"t":"소나무 아래에서-3 · 음"},{"id":"s0188","c":"vocab","h":"氏","q":"이 한자의 뜻은?","a":"성씨","o":["이름","의원","성씨","장사"],"e":"氏의 학습지 뜻은 ‘성씨’입니다.","p":4,"t":"소나무 아래에서-3 · 뜻"},{"id":"s0189","c":"vocab","h":"氏","q":"이 한자의 음은?","a":"씨","o":["신","씨","이","집"],"e":"氏의 학습지 음은 ‘씨’입니다.","p":4,"t":"소나무 아래에서-3 · 음"},{"id":"s0190","c":"vocab","h":"現","q":"이 한자의 뜻은?","a":"나타나다","o":["보다","높다","나타나다","있다"],"e":"現의 학습지 뜻은 ‘나타나다’입니다.","p":4,"t":"소나무 아래에서-3 · 뜻"},{"id":"s0191","c":"vocab","h":"現","q":"이 한자의 음은?","a":"현","o":["향","희","환","현"],"e":"現의 학습지 음은 ‘현’입니다.","p":4,"t":"소나무 아래에서-3 · 음"},{"id":"s0192","c":"vocab","h":"存","q":"이 한자의 뜻은?","a":"있다","o":["나타나다","있다","겉","반드시"],"e":"存의 학습지 뜻은 ‘있다’입니다.","p":4,"t":"소나무 아래에서-3 · 뜻"},{"id":"s0193","c":"vocab","h":"存","q":"이 한자의 음은?","a":"존","o":["저","조","존","제"],"e":"存의 학습지 음은 ‘존’입니다.","p":4,"t":"소나무 아래에서-3 · 음"},{"id":"s0194","c":"vocab","h":"謝","q":"이 한자의 뜻은?","a":"사례하다","o":["기쁘다","슬프다","사례하다","즐겁다"],"e":"謝의 학습지 뜻은 ‘사례하다’입니다.","p":4,"t":"소나무 아래에서-3 · 뜻"},{"id":"s0195","c":"vocab","h":"謝","q":"이 한자의 음은?","a":"사","o":["사","성","상","순"],"e":"謝의 학습지 음은 ‘사’입니다.","p":4,"t":"소나무 아래에서-3 · 음"},{"id":"s0196","c":"vocab","h":"罪","q":"이 한자의 뜻은?","a":"허물·죄","o":["무예","쓰다","싸움","허물·죄"],"e":"罪의 학습지 뜻은 ‘허물·죄’입니다.","p":4,"t":"소나무 아래에서-3 · 뜻"},{"id":"s0197","c":"vocab","h":"罪","q":"이 한자의 음은?","a":"죄","o":["조","죄","저","전"],"e":"罪의 학습지 음은 ‘죄’입니다.","p":4,"t":"소나무 아래에서-3 · 음"},{"id":"s0198","c":"vocab","h":"商","q":"이 한자의 뜻은?","a":"장사","o":["장사","기름","의원","임금"],"e":"商의 학습지 뜻은 ‘장사’입니다.","p":4,"t":"소나무 아래에서-3 · 뜻"},{"id":"s0199","c":"vocab","h":"商","q":"이 한자의 음은?","a":"상","o":["순","신","성","상"],"e":"商의 학습지 음은 ‘상’입니다.","p":4,"t":"소나무 아래에서-3 · 음"},{"id":"s0200","c":"vocab","h":"街","q":"이 한자의 뜻은?","a":"거리","o":["서울","방","거리","시골"],"e":"街의 학습지 뜻은 ‘거리’입니다.","p":4,"t":"소나무 아래에서-3 · 뜻"},{"id":"s0201","c":"vocab","h":"街","q":"이 한자의 음은?","a":"가","o":["고","감","계","가"],"e":"街의 학습지 음은 ‘가’입니다.","p":4,"t":"소나무 아래에서-3 · 음"},{"id":"s0202","c":"vocab","h":"必","q":"이 한자의 뜻은?","a":"반드시","o":["반드시","바라다","항상","나타나다"],"e":"必의 학습지 뜻은 ‘반드시’입니다.","p":4,"t":"소나무 아래에서-3 · 뜻"},{"id":"s0203","c":"vocab","h":"必","q":"이 한자의 음은?","a":"필","o":["필","신","이","집"],"e":"必의 학습지 음은 ‘필’입니다.","p":4,"t":"소나무 아래에서-3 · 음"},{"id":"s0204","c":"vocab","h":"甘","q":"이 한자의 뜻은?","a":"달다","o":["맵다","달다","향기","재료"],"e":"甘의 학습지 뜻은 ‘달다’입니다.","p":4,"t":"소나무 아래에서-3 · 뜻"},{"id":"s0205","c":"vocab","h":"甘","q":"이 한자의 음은?","a":"감","o":["감","군","경","가"],"e":"甘의 학습지 음은 ‘감’입니다.","p":4,"t":"소나무 아래에서-3 · 음"},{"id":"s0206","c":"vocab","h":"樂","q":"이 한자의 뜻은?","a":"즐겁다","o":["사례하다","노래","슬프다","즐겁다"],"e":"樂의 학습지 뜻은 ‘즐겁다’입니다.","p":4,"t":"소나무 아래에서-3 · 뜻"},{"id":"s0207","c":"vocab","h":"樂","q":"이 한자의 음은?","a":"락","o":["감","락","참","료"],"e":"樂의 학습지 음은 ‘락’입니다.","p":4,"t":"소나무 아래에서-3 · 음"},{"id":"s0208","c":"vocab","h":"界","q":"이 한자의 뜻은?","a":"지경","o":["다르다","지경","만약","보다"],"e":"界의 학습지 뜻은 ‘지경’입니다.","p":4,"t":"봄날의 풍경-2 · 뜻"},{"id":"s0209","c":"vocab","h":"界","q":"이 한자의 음은?","a":"계","o":["관","감","계","경"],"e":"界의 학습지 음은 ‘계’입니다.","p":4,"t":"봄날의 풍경-2 · 음"},{"id":"s0210","c":"vocab","h":"異","q":"이 한자의 뜻은?","a":"다르다","o":["다르다","만약","지경","보다"],"e":"異의 학습지 뜻은 ‘다르다’입니다.","p":4,"t":"봄날의 풍경-2 · 뜻"},{"id":"s0211","c":"vocab","h":"異","q":"이 한자의 음은?","a":"이","o":["유","의","이","애"],"e":"異의 학습지 음은 ‘이’입니다.","p":4,"t":"봄날의 풍경-2 · 음"},{"id":"s0212","c":"vocab","h":"觀","q":"이 한자의 뜻은?","a":"보다","o":["나타나다","보다","지경","밝다"],"e":"觀의 학습지 뜻은 ‘보다’입니다.","p":4,"t":"봄날의 풍경-2 · 뜻"},{"id":"s0213","c":"vocab","h":"觀","q":"이 한자의 음은?","a":"관","o":["계","관","군","가"],"e":"觀의 학습지 음은 ‘관’입니다.","p":4,"t":"봄날의 풍경-2 · 음"},{"id":"s0214","c":"vocab","h":"苦","q":"이 한자의 뜻은?","a":"쓰다","o":["높다","쓰다","싸움","낮다"],"e":"苦의 학습지 뜻은 ‘쓰다’입니다.","p":4,"t":"봄날의 풍경-2 · 뜻"},{"id":"s0215","c":"vocab","h":"苦","q":"이 한자의 음은?","a":"고","o":["고","감","관","가"],"e":"苦의 학습지 음은 ‘고’입니다.","p":4,"t":"봄날의 풍경-2 · 음"},{"id":"s0216","c":"vocab","h":"辛","q":"이 한자의 뜻은?","a":"맵다","o":["맵다","달다","기름","향기"],"e":"辛의 학습지 뜻은 ‘맵다’입니다.","p":4,"t":"봄날의 풍경-2 · 뜻"},{"id":"s0217","c":"vocab","h":"辛","q":"이 한자의 음은?","a":"신","o":["신","성","순","상"],"e":"辛의 학습지 음은 ‘신’입니다.","p":4,"t":"봄날의 풍경-2 · 음"},{"id":"s0218","c":"vocab","h":"戰","q":"이 한자의 뜻은?","a":"싸움","o":["갈다","싸움","쓰다","허물·죄"],"e":"戰의 학습지 뜻은 ‘싸움’입니다.","p":4,"t":"봄날의 풍경-2 · 뜻"},{"id":"s0219","c":"vocab","h":"戰","q":"이 한자의 음은?","a":"전","o":["집","저","죄","전"],"e":"戰의 학습지 음은 ‘전’입니다.","p":4,"t":"봄날의 풍경-2 · 음"},{"id":"s0220","c":"vocab","h":"香","q":"이 한자의 뜻은?","a":"향기","o":["향기","재료","쓰다","기름"],"e":"香의 학습지 뜻은 ‘향기’입니다.","p":4,"t":"봄날의 풍경-2 · 뜻"},{"id":"s0221","c":"vocab","h":"香","q":"이 한자의 음은?","a":"향","o":["향","희","현","호"],"e":"香의 학습지 음은 ‘향’입니다.","p":4,"t":"봄날의 풍경-2 · 음"},{"id":"s0222","c":"vocab","h":"料","q":"이 한자의 뜻은?","a":"재료","o":["재료","장사","갈다","향기"],"e":"料의 학습지 뜻은 ‘재료’입니다.","p":4,"t":"봄날의 풍경-2 · 뜻"},{"id":"s0223","c":"vocab","h":"料","q":"이 한자의 음은?","a":"료","o":["료","락","이","표"],"e":"料의 학습지 음은 ‘료’입니다.","p":4,"t":"봄날의 풍경-2 · 음"},{"id":"s0224","c":"vocab","h":"油","q":"이 한자의 뜻은?","a":"기름","o":["기름","향기","맵다","갈다"],"e":"油의 학습지 뜻은 ‘기름’입니다.","p":4,"t":"봄날의 풍경-2 · 뜻"},{"id":"s0225","c":"vocab","h":"油","q":"이 한자의 음은?","a":"유","o":["연","유","이","약"],"e":"油의 학습지 음은 ‘유’입니다.","p":4,"t":"봄날의 풍경-2 · 음"},{"id":"s0226","c":"vocab","h":"號","q":"이 한자의 뜻은?","a":"부르다","o":["이름","부르다","아침","차례"],"e":"號의 학습지 뜻은 ‘부르다’입니다.","p":4,"t":"봄날의 풍경-2 · 뜻"},{"id":"s0227","c":"vocab","h":"號","q":"이 한자의 음은?","a":"호","o":["향","황","환","호"],"e":"號의 학습지 음은 ‘호’입니다.","p":4,"t":"봄날의 풍경-2 · 음"},{"id":"s0228","c":"vocab","h":"順","q":"이 한자의 뜻은?","a":"따르다","o":["임금","바라다","항상","따르다"],"e":"順의 학습지 뜻은 ‘따르다’입니다.","p":4,"t":"봄날의 풍경-2 · 뜻"},{"id":"s0229","c":"vocab","h":"順","q":"이 한자의 음은?","a":"순","o":["상","사","순","성"],"e":"順의 학습지 음은 ‘순’입니다.","p":4,"t":"봄날의 풍경-2 · 음"},{"id":"s0230","c":"vocab","h":"番","q":"이 한자의 뜻은?","a":"차례","o":["항상","이름","아침","차례"],"e":"番의 학습지 뜻은 ‘차례’입니다.","p":4,"t":"봄날의 풍경-2 · 뜻"},{"id":"s0231","c":"vocab","h":"番","q":"이 한자의 음은?","a":"번","o":["전","방","번","성"],"e":"番의 학습지 음은 ‘번’입니다.","p":4,"t":"봄날의 풍경-2 · 음"},{"id":"s0232","c":"vocab","h":"高","q":"이 한자의 뜻은?","a":"높다","o":["낮다","밝다","높다","나타나다"],"e":"高의 학습지 뜻은 ‘높다’입니다.","p":4,"t":"봄날의 풍경-2 · 뜻"},{"id":"s0233","c":"vocab","h":"高","q":"이 한자의 음은?","a":"고","o":["경","가","계","고"],"e":"高의 학습지 음은 ‘고’입니다.","p":4,"t":"봄날의 풍경-2 · 음"},{"id":"s0234","c":"vocab","h":"低","q":"이 한자의 뜻은?","a":"낮다","o":["나타나다","맵다","낮다","높다"],"e":"低의 학습지 뜻은 ‘낮다’입니다.","p":4,"t":"봄날의 풍경-2 · 뜻"},{"id":"s0235","c":"vocab","h":"低","q":"이 한자의 음은?","a":"저","o":["죄","집","조","저"],"e":"低의 학습지 음은 ‘저’입니다.","p":4,"t":"봄날의 풍경-2 · 음"},{"id":"s0236","c":"vocab","h":"歌","q":"이 한자의 뜻은?","a":"노래","o":["춤","싸움","노래","갈다"],"e":"歌의 학습지 뜻은 ‘노래’입니다.","p":4,"t":"봄날의 풍경-2 · 뜻"},{"id":"s0237","c":"vocab","h":"歌","q":"이 한자의 음은?","a":"가","o":["고","가","계","군"],"e":"歌의 학습지 음은 ‘가’입니다.","p":4,"t":"봄날의 풍경-2 · 음"},{"id":"s0238","c":"vocab","h":"舞","q":"이 한자의 뜻은?","a":"춤","o":["기쁘다","노래","즐겁다","춤"],"e":"舞의 학습지 뜻은 ‘춤’입니다.","p":4,"t":"봄날의 풍경-2 · 뜻"},{"id":"s0239","c":"vocab","h":"舞","q":"이 한자의 음은?","a":"무","o":["순","제","무","군"],"e":"舞의 학습지 음은 ‘무’입니다.","p":4,"t":"봄날의 풍경-2 · 음"},{"id":"s0240","c":"vocab","h":"朝","q":"이 한자의 뜻은?","a":"아침","o":["아침","항상","저녁","이름"],"e":"朝의 학습지 뜻은 ‘아침’입니다.","p":4,"t":"봄날의 풍경-2 · 뜻"},{"id":"s0241","c":"vocab","h":"朝","q":"이 한자의 음은?","a":"조","o":["집","제","조","죄"],"e":"朝의 학습지 음은 ‘조’입니다.","p":4,"t":"봄날의 풍경-2 · 음"},{"id":"s0242","c":"vocab","h":"夕","q":"이 한자의 뜻은?","a":"저녁","o":["항상","저녁","아침","차례"],"e":"夕의 학습지 뜻은 ‘저녁’입니다.","p":4,"t":"봄날의 풍경-2 · 뜻"},{"id":"s0243","c":"vocab","h":"夕","q":"이 한자의 음은?","a":"석","o":["성","순","신","석"],"e":"夕의 학습지 음은 ‘석’입니다.","p":4,"t":"봄날의 풍경-2 · 음"},{"id":"s0244","c":"vocab","h":"研","q":"이 한자의 뜻은?","a":"갈다","o":["무예","갈다","싸움","노래"],"e":"研의 학습지 뜻은 ‘갈다’입니다.","p":4,"t":"봄날의 풍경-2 · 뜻"},{"id":"s0245","c":"vocab","h":"研","q":"이 한자의 음은?","a":"연","o":["의","연","이","애"],"e":"研의 학습지 음은 ‘연’입니다.","p":4,"t":"봄날의 풍경-2 · 음"},{"id":"s0246","c":"vocab","h":"武","q":"이 한자의 뜻은?","a":"무예","o":["무예","쓰다","허물·죄","갈다"],"e":"武의 학습지 뜻은 ‘무예’입니다.","p":4,"t":"봄날의 풍경-2 · 뜻"},{"id":"s0247","c":"vocab","h":"武","q":"이 한자의 음은?","a":"무","o":["무","료","순","만"],"e":"武의 학습지 음은 ‘무’입니다.","p":4,"t":"봄날의 풍경-2 · 음"},{"id":"s0248","c":"vocab","h":"哀","q":"이 한자의 뜻은?","a":"슬프다","o":["즐겁다","기쁘다","슬프다","사례하다"],"e":"哀의 학습지 뜻은 ‘슬프다’입니다.","p":4,"t":"봄날의 풍경-2 · 뜻"},{"id":"s0249","c":"vocab","h":"哀","q":"이 한자의 음은?","a":"애","o":["애","약","연","의"],"e":"哀의 학습지 음은 ‘애’입니다.","p":4,"t":"봄날의 풍경-2 · 음"},{"id":"s0250","c":"vocab","h":"歡","q":"이 한자의 뜻은?","a":"기쁘다","o":["노래","기쁘다","즐겁다","슬프다"],"e":"歡의 학습지 뜻은 ‘기쁘다’입니다.","p":4,"t":"봄날의 풍경-2 · 뜻"},{"id":"s0251","c":"vocab","h":"歡","q":"이 한자의 음은?","a":"환","o":["희","환","향","호"],"e":"歡의 학습지 음은 ‘환’입니다.","p":4,"t":"봄날의 풍경-2 · 음"},{"id":"s0252","c":"vocab","h":"統","q":"이 한자의 뜻은?","a":"거느리다","o":["거느리다","모이다","더하다","일만"],"e":"統의 학습지 뜻은 ‘거느리다’입니다.","p":4,"t":"봄날의 풍경-2 · 뜻"},{"id":"s0253","c":"vocab","h":"統","q":"이 한자의 음은?","a":"통","o":["통","성","고","호"],"e":"統의 학습지 음은 ‘통’입니다.","p":4,"t":"봄날의 풍경-2 · 음"},{"id":"s0254","c":"vocab","h":"明","q":"이 한자의 뜻은?","a":"밝다","o":["높다","바라다","보다","밝다"],"e":"明의 학습지 뜻은 ‘밝다’입니다.","p":4,"t":"봄날의 풍경-2 · 뜻"},{"id":"s0255","c":"vocab","h":"明","q":"이 한자의 음은?","a":"명","o":["명","무","연","만"],"e":"明의 학습지 음은 ‘명’입니다.","p":4,"t":"봄날의 풍경-2 · 음"},{"id":"s0256","c":"vocab","h":"若","q":"이 한자의 뜻은?","a":"만약","o":["다르다","지경","보다","만약"],"e":"若의 학습지 뜻은 ‘만약’입니다.","p":4,"t":"봄날의 풍경-2 · 뜻"},{"id":"s0257","c":"vocab","h":"若","q":"이 한자의 음은?","a":"약","o":["연","애","약","이"],"e":"若의 학습지 음은 ‘약’입니다.","p":4,"t":"봄날의 풍경-2 · 음"},{"id":"s0258","c":"vocab","h":"萬","q":"이 한자의 뜻은?","a":"일만","o":["모이다","거느리다","참여하다","일만"],"e":"萬의 학습지 뜻은 ‘일만’입니다.","p":4,"t":"봄날의 풍경-2 · 뜻"},{"id":"s0259","c":"vocab","h":"萬","q":"이 한자의 음은?","a":"만","o":["참","명","무","만"],"e":"萬의 학습지 음은 ‘만’입니다.","p":4,"t":"봄날의 풍경-2 · 음"},{"id":"s0260","c":"parallel","h":"對句","q":"두 시구의 내용이나 어법을 긴밀하게 연결하여 짝을 이루는 표현과 관계 깊은 용어는?","a":"대구(對句)","o":["설의법","대구(對句)","압운(押韻)","비유법"],"e":"학습지에는 대우법으로 짝을 이룬 한시 구절을 대구라고 설명합니다.","p":5,"t":"대우법 · 시구 비교"},{"id":"s0261","c":"parallel","h":"對偶法","q":"한시에서 두 시구를 내용·어법상 짝이 되게 하는 표현 방법은?","a":"대우법","o":["대우법","도치법","설의법","압운법"],"e":"대우법은 두 시구를 긴밀하게 대응시켜 하나의 짝을 이루게 합니다.","p":5,"t":"대우법 · 시구 비교"},{"id":"s0262","c":"parallel","h":"對句","q":"대구의 특징으로 가장 알맞은 것은?","a":"두 시구의 내용이나 어법이 서로 대응한다","o":["앞 시구의 내용을 뒤 시구에서 반대로 부정한다","시구의 낱글자를 획수 순으로 나열한다","두 시구의 끝 글자에서 소리가 일치한다","두 시구의 내용이나 어법이 서로 대응한다"],"e":"대구는 시구끼리 의미나 문장 구조가 대응하도록 하는 것입니다.","p":5,"t":"대우법 · 시구 비교"},{"id":"s0263","c":"parallel","h":"犬走梅花落","q":"이 구절과 대구를 이루는 구절은?","a":"鷄行竹葉成","o":["鷄行竹葉成","雲深不知處","孫子夜夜讀書不","祖父朝朝藥酒猛"],"e":"犬走梅花落 ↔ 鷄行竹葉成은 개와 닭의 발자국을 꽃과 잎에 비유한 짝입니다.","p":3,"t":"대우법 · 시구 비교"},{"id":"s0265","c":"parallel","h":"孫子夜夜讀書不","q":"이 구절의 짝을 이루는 구절은?","a":"祖父朝朝藥酒猛","o":["山青石白間間花","祖父朝朝藥酒猛","犬走梅花落","鷄行竹葉成"],"e":"손자와 할아버지, 밤마다와 아침마다가 서로 대응합니다.","p":3,"t":"대우법 · 시구 비교"},{"id":"s0267","c":"parallel","h":"犬走梅花落","q":"‘犬走’와 대응하는 표현은?","a":"鷄行","o":["花落","鷄行","竹葉","孫子"],"e":"개가 달린다 ↔ 닭이 걸어간다의 대응입니다.","p":5,"t":"대우법 · 시구 비교"},{"id":"s0268","c":"parallel","h":"梅花","q":"‘梅花’와 대응하는 말은?","a":"竹葉","o":["夜夜","祖父","鷄行","竹葉"],"e":"매화꽃 ↔ 대나무 잎이 의미·형태상 서로 짝을 이룹니다.","p":5,"t":"대우법 · 시구 비교"},{"id":"s0269","c":"parallel","h":"孫子","q":"‘孫子’와 대응하는 말은?","a":"祖父","o":["夜夜","藥酒","祖父","竹葉"],"e":"손자 ↔ 할아버지가 대응합니다.","p":5,"t":"대우법 · 시구 비교"},{"id":"s0270","c":"parallel","h":"夜夜","q":"‘夜夜’와 대응하는 말은?","a":"朝朝","o":["梅花","藥酒","朝朝","竹葉"],"e":"밤마다 ↔ 아침마다가 대응합니다.","p":5,"t":"대우법 · 시구 비교"},{"id":"s0273","c":"parallel","h":"犬走梅花落","q":"첫 번째 대구에서 매화꽃에 비유된 것은?","a":"개의 발자국","o":["닭의 발자국","매화꽃의 그림자","대나무 잎의 그림자","개의 발자국"],"e":"개의 발자국이 매화꽃처럼 보인다는 재치 있는 비유입니다.","p":5,"t":"대우법 · 시구 비교"},{"id":"s0274","c":"parallel","h":"鷄行竹葉成","q":"첫 번째 대구에서 대나무 잎에 비유된 것은?","a":"닭의 발자국","o":["개의 발자국","매화꽃의 그림자","대나무 잎의 그림자","닭의 발자국"],"e":"닭의 발자국이 대나무 잎 모양을 닮은 점을 표현합니다.","p":5,"t":"대우법 · 시구 비교"},{"id":"s0275","c":"spring","h":"賞景","q":"「봄날 풍경」 학습지에 제시된 시의 지은이는?","a":"김병연(김삿갓)","o":["가도(賈島)","이백(李白)","김병연(김삿갓)","두보(杜甫)"],"e":"한시 감상 1번에 지은이는 김병연(김삿갓)으로 적혀 있습니다.","p":3,"t":"시구 해석 · 주제"},{"id":"s0276","c":"spring","h":"七言絶句","q":"「봄날 풍경」의 한시 형식은?","a":"칠언절구","o":["칠언율시","오언절구","오언율시","칠언절구"],"e":"한 행이 7글자이고 모두 4행이므로 칠언절구입니다.","p":5,"t":"시구 해석 · 주제"},{"id":"s0277","c":"spring","h":"花 · 何","q":"이 시의 압운에 사용된 두 한자는?","a":"花와 何","o":["花와 何","靑과 白","山과 石","一步와 二步"],"e":"학습지 ‘한시 감상’ 3번의 압운된 한자는 花(화), 何(하)입니다.","p":5,"t":"시구 해석 · 주제"},{"id":"s0278","c":"spring","h":"押韻","q":"한시에서 ‘압운’의 의미는?","a":"정해진 구절 끝에서 운을 맞춤","o":["두 구절의 내용과 어법을 대응시킴","시를 기·승·전·결로 전개함","한 구절을 다섯 글자로 만듦","정해진 구절 끝에서 운을 맞춤"],"e":"압운은 일정한 자리의 끝 글자에서 소리의 운을 맞추는 방법입니다.","p":3,"t":"시구 해석 · 주제"},{"id":"s0279","c":"spring","h":"賞景","q":"이 시의 주제로 가장 알맞은 것은?","a":"아름다운 봄날의 자연 풍경을 감상함","o":["학문을 게을리하는 사람을 풍자함","세속을 떠난 은자를 그리워함","전쟁으로 황폐해진 마을을 슬퍼함","아름다운 봄날의 자연 풍경을 감상함"],"e":"시인은 푸른 산, 흰 돌, 꽃, 새소리 등 아름다운 자연을 찬탄합니다.","p":5,"t":"시구 해석 · 주제"},{"id":"s0280","c":"spring","h":"其於林下鳥聲何","q":"이 시가 그림으로 표현하기 어렵다고 강조한 것은?","a":"숲속의 새소리","o":["숲속의 새소리","꽃이 핀 모습","산의 푸른 빛깔","돌의 흰 빛깔"],"e":"눈으로 보이는 경치는 그릴 수 있지만 새소리는 그림에 담기 어렵습니다.","p":5,"t":"시구 해석 · 주제"},{"id":"s0281","c":"spring","h":"賞景","q":"이 시에서 자연의 모습을 표현한 감각의 조합으로 알맞은 것은?","a":"시각과 청각","o":["시각과 청각","시각과 후각","청각과 미각","후각과 청각"],"e":"푸른 산·흰 돌·꽃은 시각, 새소리는 청각적 표현입니다.","p":5,"t":"시구 해석 · 주제"},{"id":"s0282","c":"spring","h":"一步二步三步立","q":"이 구절의 뜻으로 가장 알맞은 것은?","a":"한 걸음 두 걸음 세 걸음 걷다가 섬","o":["만약 화공이 이 경치를 그림으로 그리려 한다면","숲 아래 새소리는 어찌 그려 낼 것인가","푸른 산과 흰 돌 사이사이에 꽃이 있음","한 걸음 두 걸음 세 걸음 걷다가 섬"],"e":"一步二步三步立: 한 걸음 두 걸음 세 걸음 걷다가 섬.","p":5,"t":"시구 해석 · 주제"},{"id":"s0283","c":"spring","h":"山青石白間間花","q":"이 구절의 뜻으로 가장 알맞은 것은?","a":"푸른 산과 흰 돌 사이사이에 꽃이 있음","o":["한 걸음 두 걸음 세 걸음 걷다가 섬","푸른 산과 흰 돌 사이사이에 꽃이 있음","만약 화공이 이 경치를 그림으로 그리려 한다면","숲 아래 새소리는 어찌 그려 낼 것인가"],"e":"山青石白間間花: 푸른 산과 흰 돌 사이사이에 꽃이 있음.","p":5,"t":"시구 해석 · 주제"},{"id":"s0284","c":"spring","h":"若使畫工謀此景","q":"이 구절의 뜻으로 가장 알맞은 것은?","a":"만약 화공이 이 경치를 그림으로 그리려 한다면","o":["숲 아래 새소리는 어찌 그려 낼 것인가","만약 화공이 이 경치를 그림으로 그리려 한다면","푸른 산과 흰 돌 사이사이에 꽃이 있음","한 걸음 두 걸음 세 걸음 걷다가 섬"],"e":"若使畫工謀此景: 만약 화공이 이 경치를 그림으로 그리려 한다면.","p":5,"t":"시구 해석 · 주제"},{"id":"s0285","c":"spring","h":"其於林下鳥聲何","q":"이 구절의 뜻으로 가장 알맞은 것은?","a":"숲 아래 새소리는 어찌 그려 낼 것인가","o":["한 걸음 두 걸음 세 걸음 걷다가 섬","푸른 산과 흰 돌 사이사이에 꽃이 있음","숲 아래 새소리는 어찌 그려 낼 것인가","만약 화공이 이 경치를 그림으로 그리려 한다면"],"e":"其於林下鳥聲何: 숲 아래 새소리는 어찌 그려 낼 것인가.","p":5,"t":"시구 해석 · 주제"},{"id":"s0289","c":"spring","h":"畫工","q":"‘畫工’이 의미하는 사람은?","a":"그림을 그리는 사람","o":["시를 짓는 사람","그림을 그리는 사람","산에서 약초를 캐는 사람","꽃을 기르는 사람"],"e":"畫工은 화공, 즉 그림 그리는 사람입니다.","p":3,"t":"시구 해석 · 주제"},{"id":"s0291","c":"spring","h":"鳥聲","q":"‘鳥聲’의 뜻은?","a":"새소리","o":["물소리","새소리","바람소리","발자국 소리"],"e":"鳥는 새, 聲은 소리입니다.","p":3,"t":"시구 해석 · 주제"},{"id":"s0292","c":"spring","h":"若使","q":"‘若使’가 나타내는 상황은?","a":"만약 ~한다면이라는 가정","o":["만약 ~한다면이라는 가정","지난 일을 후회함","앞으로 하라고 명령함","지금 일어나는 일을 확정함"],"e":"若使는 ‘만약 ~하게 한다면’의 가정 표현입니다.","p":3,"t":"시구 해석 · 주제"},{"id":"s0293","c":"spring","h":"賞景","q":"한시의 마지막 구절에 담긴 물음으로 가장 알맞은 것은?","a":"새소리를 어떻게 그림으로 표현할 것인가?","o":["새소리를 어떻게 그림으로 표현할 것인가?","화공은 어느 산에서 그림을 그리는가?","산과 바위는 어떤 색으로 칠해야 하는가?","꽃잎은 왜 바람에 떨어졌는가?"],"e":"숲속의 새소리를 화폭에 담기 어렵다는 뜻을 되묻는 표현입니다.","p":3,"t":"시구 해석 · 주제"}]};
+const CATS = DATA.categories.map(([id,title,subtitle,desc],index)=>({id,title,subtitle,desc,index}));
+const BANK = DATA.questions;
+const BY_ID = new Map(BANK.map(q=>[q.id,q]));
+const CAT_BY_ID = new Map(CATS.map(cat=>[cat.id,cat]));
+const $ = id => document.getElementById(id);
+const STORAGE_MISSED = 'hanja-master-wrong-2026-v4';
+const STORAGE_THEME = 'hanja-master-theme-2026';
+const STORAGE_PROGRESS = 'hanja-master-progress-2026-v6';
+const STORAGE_MEMO = 'hanja-master-notes-2026-v6';
+let missed = new Set();
+let session = null;
+let locked = false;
+let displayOptions = [];
+let attempts = {};
+const safeRead = key => {try {return localStorage.getItem(key)} catch(e){return null}};
+const safeWrite = (key,value) => {try {localStorage.setItem(key,value)}catch(e){}};
+try {
+  const arr=JSON.parse(safeRead(STORAGE_MISSED)||'[]');
+  if(Array.isArray(arr)) missed=new Set(arr.filter(id=>BY_ID.has(id)));
+} catch(e) {missed=new Set()}
+try{const saved=JSON.parse(safeRead(STORAGE_PROGRESS)||'{}');if(saved && typeof saved==='object' && !Array.isArray(saved)){for(const id of Object.keys(saved)){if(BY_ID.has(id) && Number.isFinite(saved[id]?.n) && Number.isFinite(saved[id]?.w))attempts[id]={n:Math.max(0,saved[id].n),w:Math.max(0,saved[id].w),streak:Math.max(0,saved[id].streak||0)};}}}catch(e){}
+const theme=safeRead(STORAGE_THEME);
+if(theme==='light'||theme==='dark')document.body.dataset.theme=theme;
+$('themeBtn').textContent=document.body.dataset.theme==='light'?'☾':'☼';
+function shuffle(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a}
+function saveMissed(){safeWrite(STORAGE_MISSED,JSON.stringify([...missed]));safeWrite(STORAGE_PROGRESS,JSON.stringify(attempts));updateSavedCount();updateProgressSummary()}
+function updateProgressSummary(){const n=BANK.filter(q=>(attempts[q.id]?.n||0)>0).length;const clear=BANK.filter(q=>(attempts[q.id]?.streak||0)>=2).length;$('progressSummary').textContent='연습 기록 · 풀어 본 '+n+' / '+BANK.length+'문제 · 연속 2회 정답 '+clear+'문제 · 저장된 오답 '+missed.size+'문제';}
+function updateSavedCount(){$('savedWrongCount').textContent=missed.size;$('savedWrongBtn').disabled=missed.size===0}
+function setView(name){
+  $('homeView').hidden=name!=='home';$('quizView').hidden=name!=='quiz';$('resultView').hidden=name!=='result';
+  $('homeNav').hidden=name==='home';window.scrollTo({top:0,behavior:'auto'});
+}
+function renderCategories(){
+  const holder=$('categoryGrid');holder.replaceChildren();
+  CATS.forEach(cat=>{
+    const count=BANK.filter(q=>q.c===cat.id).length;
+    const label=document.createElement('label');label.className='cat-card';
+    const input=document.createElement('input');input.type='checkbox';input.checked=true;input.value=cat.id;
+    input.className='cat-check';input.setAttribute('aria-label',cat.title+' 선택');input.addEventListener('change',updateSelected);
+    const content=document.createElement('div');
+    const index=String(cat.index+1).padStart(2,'0');
+    content.innerHTML='<div class="tiny">학습지 '+index+' / 07</div><h3></h3><p></p><div class="count"></div>';
+    content.querySelector('h3').textContent=cat.title;
+    content.querySelector('p').textContent=cat.subtitle;
+    content.querySelector('.count').textContent=count+'문제';
+    label.append(input,content);holder.appendChild(label);
+  });
+  updateSelected();
+}
+function selectedCats(){return [...document.querySelectorAll('.cat-check:checked')].map(input=>input.value)}
+function selectedQuestions(){const selected=new Set(selectedCats());return BANK.filter(q=>selected.has(q.c))}
+function updateSelected(){
+  const n=selectedCats().length,m=selectedQuestions().length;
+  $('selectedInfo').innerHTML='';
+  $('selectedInfo').append(document.createTextNode(n+'개 단원 선택'));
+  const child=document.createElement('small');child.textContent='총 '+m+'문제';$('selectedInfo').appendChild(child);
+  $('startBtn').disabled=$('allBtn').disabled=$('weakBtn').disabled=$('examBtn').disabled=m===0;
+}
+function weightedShuffle(pool,prioritize){
+  return pool.map(q=>{
+    const hist=attempts[q.id]||{n:0,w:0,streak:0};
+    const weakness=hist.n===0?2.4:hist.streak>=2?.65:hist.w>0?3.5:1.15;
+    const weight=(prioritize?Math.max(1,q.p):1)*weakness;
+    return {q,key:-Math.log(Math.max(Math.random(),0.000001))/weight};
+  }).sort((a,b)=>a.key-b.key).map(x=>x.q);
+}
+function conceptKey(q){
+  const x=Number(q.id.slice(1));
+  if(q.c==='radicals')return 'r'+Math.floor((x-13)/2);
+  if(q.c==='vocab')return 'v'+Math.floor((x-154)/2);
+  if(q.c==='variants'&&x>=113&&x<=136)return 'f'+Math.floor((x-113)/2);
+  return q.id;
+}
+function chooseQuestions(pool,limit,prioritize,weakOnly=false){
+  if(limit==='all'||Number(limit)>=pool.length)return shuffle(pool.slice());
+  const n=Math.min(Number(limit)||20,pool.length);
+  // Topic weights favor demonstrated worksheet drills, never pretend to know the actual test.
+  const w={dictionary:1,radicals:3.5,variants:1.7,hermit:1.5,vocab:3.8,parallel:1.3,spring:1.7};
+  const groups=new Map(),chosen=[],seenConcept=new Set();
+  for(const q of pool){if(!groups.has(q.c))groups.set(q.c,[]);groups.get(q.c).push(q)}
+  for(const [c,g] of groups)groups.set(c,weightedShuffle(g,prioritize));
+  const picked={};const keys=shuffle([...groups.keys()]);
+  // Every chosen topic appears at least once when the requested length permits it.
+  function take(c,avoidDuplicate){
+    const a=groups.get(c);if(!a?.length)return false;
+    let idx=a.findIndex(q=>!avoidDuplicate||!seenConcept.has(conceptKey(q)));
+    if(idx<0)return false;
+    const q=a.splice(idx,1)[0];chosen.push(q);picked[c]=(picked[c]||0)+1;seenConcept.add(conceptKey(q));return true;
+  }
+  if(n>=keys.length)for(const c of keys)take(c,true);
+  for(let pass=0;pass<2 && chosen.length<n;pass++){
+    while(chosen.length<n){
+      const choices=keys.filter(c=>groups.get(c)?.some(q=>pass>0||!seenConcept.has(conceptKey(q))));
+      if(!choices.length)break;
+      const c=choices.sort((a,b)=>((picked[a]||0)/(w[a]||1))-((picked[b]||0)/(w[b]||1)))[0];
+      if(!take(c,pass===0))break;
+    }
+  }
+  return shuffle(chosen);
+}
+function startQuiz(pool,length,prioritize,examMode=false){
+  if(!pool.length){alert('풀 문제를 선택해 줘.');return}
+  const questions=chooseQuestions(pool,length,prioritize);
+  session={questions,index:0,correct:0,records:[],wrong:[],examMode,origin:{length,prioritize}};
+  setView('quiz');drawQuestion();
+}
+function drawQuestion(){
+  locked=false;
+  const q=session.questions[session.index];
+  $('counter').textContent=(session.index+1)+' / '+session.questions.length;
+  $('progressBar').style.width=(session.index/session.questions.length*100)+'%';
+  $('quizCategory').textContent=session.examMode?'실전 모드 · 채점은 마지막에':('정답 '+session.correct+'개 · '+session.questions.length+'문제 중');
+  $('questionCategory').textContent=CAT_BY_ID.get(q.c).title;
+  $('questionNumber').textContent='QUESTION '+String(session.index+1).padStart(2,'0');
+  const hero=$('questionHero');hero.textContent=q.h;hero.lang=/[가-힣]/.test(q.h)?'ko':'zh-Hant';
+  hero.className='hanja '+(/[가-힣]/.test(q.h)?'text-label':Array.from(q.h).length<=1?'single':Array.from(q.h).length<=3?'short':Array.from(q.h).length<=5?'medium':'long');
+  $('questionTag').textContent=q.t||'';
+  $('questionText').textContent=q.q;
+  $('feedback').hidden=true;$('nextBtn').hidden=true;
+  const holder=$('options');holder.replaceChildren();displayOptions=shuffle(q.o.slice());
+  displayOptions.forEach((opt,i)=>{
+    const btn=document.createElement('button');btn.type='button';btn.className='choice';btn.dataset.answer=opt;
+    const num=document.createElement('span');num.className='key';num.textContent=String(i+1);
+    const text=document.createElement('span');text.className='option-text';text.textContent=opt;
+    if(/^[㐀-鿿豈-﫿⺀-⻿]+$/.test(opt))text.classList.add('glyph-option');
+    else if(/^[㐀-鿿豈-﫿⺀-⻿][（(]/.test(opt))text.classList.add('glyph-option-small');
+    const mark=document.createElement('span');mark.className='mark';
+    btn.append(num,text,mark);btn.addEventListener('click',()=>chooseAnswer(opt));holder.appendChild(btn);
+  });
+}
+function chooseAnswer(answer){
+  if(locked||!session)return;
+  locked=true;
+  const q=session.questions[session.index],right=answer===q.a;
+  session.records.push({id:q.id,choice:answer,correct:right});
+  if(right){session.correct++;missed.delete(q.id)}
+  else {session.wrong.push(q.id);missed.add(q.id)}
+  const prev=attempts[q.id]||{n:0,w:0,streak:0};
+  attempts[q.id]={n:prev.n+1,w:prev.w+(right?0:1),streak:right?prev.streak+1:0};
+  saveMissed();
+  if(session.examMode){
+    for(const button of $('options').children){button.disabled=true;button.classList.add(button.dataset.answer===answer?'picked':'dimmed')}
+    $('feedback').hidden=true;$('nextBtn').hidden=false;
+    $('nextBtn').textContent=session.index===session.questions.length-1?'채점 결과 보기 →':'다음 문제 →';
+    $('progressBar').style.width=((session.index+1)/session.questions.length*100)+'%';
+    return;
+  }
+  for(const button of $('options').children){
+    button.disabled=true;
+    const v=button.dataset.answer;
+    if(v===q.a){button.classList.add('correct');button.querySelector('.mark').textContent='✓'}
+    else if(v===answer){button.classList.add('incorrect');button.querySelector('.mark').textContent='✕'}
+    else button.classList.add('dimmed');
+  }
+  $('feedbackTitle').textContent=right?'정답이야!':'아쉬워, 정답은 '+q.a+'!';
+  $('feedbackTitle').className='feedback-head '+(right?'ok':'bad');
+  $('feedbackText').textContent=q.e;
+  $('feedback').hidden=false;
+  $('nextBtn').hidden=false;
+  $('nextBtn').textContent=session.index===session.questions.length-1?'결과 보기 →':'다음 문제 →';
+  $('progressBar').style.width=((session.index+1)/session.questions.length*100)+'%';
+  $('quizCategory').textContent=session.examMode?'실전 모드 · 채점은 마지막에':('정답 '+session.correct+'개 · '+session.questions.length+'문제 중');
+}
+function nextQuestion(){
+  if(!session||!locked)return;
+  session.index++;
+  if(session.index>=session.questions.length)showResults();else drawQuestion();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function showResults(){
+  setView('result');
+  const total=session.records.length,correct=session.correct;
+  const pct=Math.round(correct*100/total);
+  $('medal').textContent=pct===100?'🏆':pct>=80?'✦':pct>=60?'✧':'☘';
+  $('resultTitle').textContent=pct===100?'완벽해! 모두 정답':pct>=80?'좋아, 거의 다 맞혔어!':pct>=60?'많이 알고 있어!':'틀린 부분을 다시 익혀 보자';
+  $('resultRatio').textContent=pct+'%';
+  $('resultLine').textContent='정답 '+correct+'문제 / 전체 '+total+'문제';
+  $('resultDigest').replaceChildren();
+  for(const s of ['정답 '+correct+'개','오답 '+(total-correct)+'개','학습 단원 '+new Set(session.questions.map(q=>q.c)).size+'개']){
+    const span=document.createElement('span');span.textContent=s;$('resultDigest').appendChild(span);
+  }
+  $('wrongAgainBtn').disabled=session.wrong.length===0;
+  $('wrongAgainBtn').textContent='이번 오답 '+session.wrong.length+'개 복습';
+  const data=new Map();
+  for(const rec of session.records){
+    const cat=BY_ID.get(rec.id).c;
+    if(!data.has(cat))data.set(cat,{total:0,correct:0});
+    const x=data.get(cat);x.total++;if(rec.correct)x.correct++;
+  }
+  $('resultBars').replaceChildren();
+  for(const cat of CATS){
+    if(!data.has(cat.id))continue;
+    const s=data.get(cat.id), p=Math.round(s.correct/s.total*100);
+    const row=document.createElement('div');row.className='category-result';
+    const name=document.createElement('span');name.className='name';name.textContent=cat.title;
+    const track=document.createElement('div');track.className='rbar';const fill=document.createElement('div');fill.style.width=p+'%';track.appendChild(fill);
+    const pct=document.createElement('span');pct.className='pct';pct.textContent=s.correct+'/'+s.total;
+    row.append(name,track,pct);$('resultBars').append(row);
+  }
+  const wrongDetails=$('wrongDetail');wrongDetails.replaceChildren();
+  const wrongRecords=session.records.filter(x=>!x.correct);
+  if(!wrongRecords.length){const para=document.createElement('p');para.textContent='이번에 틀린 문제가 없어!';wrongDetails.appendChild(para)}
+  else for(const rec of wrongRecords){
+    const q=BY_ID.get(rec.id);
+    const detail=document.createElement('details'),summary=document.createElement('summary');
+    summary.textContent=q.h+' · '+q.q;detail.appendChild(summary);
+    const a=document.createElement('p');a.append('내가 고른 답: '+rec.choice+' · 정답: ');
+    const bold=document.createElement('b');bold.textContent=q.a;a.append(bold);
+    const ex=document.createElement('p');ex.textContent=q.e;detail.append(a,ex);wrongDetails.appendChild(detail);
+  }
+}
+function backHome(force){
+  if(!force&&!$('quizView').hidden&&session&&session.index>0&&
+     !confirm('현재 퀴즈를 종료하고 범위 선택으로 돌아갈까?'))return;
+  setView('home');updateSavedCount();
+}
+$('selectAll').addEventListener('click',()=>{document.querySelectorAll('.cat-check').forEach(x=>x.checked=true);updateSelected()});
+$('clearAll').addEventListener('click',()=>{document.querySelectorAll('.cat-check').forEach(x=>x.checked=false);updateSelected()});
+$('startBtn').addEventListener('click',()=>startQuiz(selectedQuestions(),$('countSelect').value,$('priorityToggle').checked));
+$('allBtn').addEventListener('click',()=>startQuiz(selectedQuestions(),'all',false));
+$('savedWrongBtn').addEventListener('click',()=>startQuiz([...missed].map(id=>BY_ID.get(id)).filter(Boolean),'all',false));
+$('weakBtn').addEventListener('click',()=>startQuiz(selectedQuestions(),20,true));
+$('examBtn').addEventListener('click',()=>startQuiz(selectedQuestions(),20,true,true));
+$('myMemo').value=safeRead(STORAGE_MEMO)||'';
+$('myMemo').addEventListener('input',e=>safeWrite(STORAGE_MEMO,e.target.value));
+$('nextBtn').addEventListener('click',nextQuestion);
+$('wrongAgainBtn').addEventListener('click',()=>startQuiz(session.wrong.map(id=>BY_ID.get(id)).filter(Boolean),'all',false));
+$('newQuizBtn').addEventListener('click',()=>startQuiz(selectedQuestions(),$('countSelect').value,$('priorityToggle').checked));
+$('backBtn').addEventListener('click',()=>backHome(true));
+$('homeNav').addEventListener('click',()=>backHome(false));
+$('themeBtn').addEventListener('click',()=>{
+  const mode=document.body.dataset.theme==='dark'?'light':'dark';document.body.dataset.theme=mode;
+  $('themeBtn').textContent=mode==='light'?'☾':'☼';safeWrite(STORAGE_THEME,mode);
+});
+document.addEventListener('keydown',e=>{
+  if($('quizView').hidden||e.altKey||e.ctrlKey||e.metaKey||e.repeat)return;
+  if(e.key>='1'&&e.key<='4'&&!locked){
+    const idx=Number(e.key)-1;if(idx<displayOptions.length){e.preventDefault();chooseAnswer(displayOptions[idx])}
+  } else if(e.key==='Enter'&&locked){
+    if(document.activeElement&&document.activeElement.tagName==='BUTTON'&&document.activeElement!==$('nextBtn'))document.activeElement.blur();
+    e.preventDefault();nextQuestion();
+  }
+});
+$('totalBadge').textContent=BANK.length+'문제 수록';
+renderCategories();updateSavedCount();updateProgressSummary();
+</script>
+</body>
+</html>
